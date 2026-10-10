@@ -389,6 +389,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   transition: opacity .8s var(--ease), transform 1.4s var(--ease);
 }
 .menu__img.is-active { opacity: 1; transform: none; }
+/* Menu photo (ceremony details). Links whose section photo hasn't been added yet
+   show it underneath instead of a placeholder */
+.img-menu { --img: url("images/menu.jpg"); --img-pos: center 42%; }
+.menu__img {
+  background-image: var(--img, none), url("images/menu.jpg"), var(--ph-art), var(--ph-glow);
+  background-size: cover, cover, var(--art-size, auto 72%), cover, cover, cover;
+  background-position: var(--img-pos, center), center 42%, var(--art-pos, right -8% bottom -4%), center, center, center;
+}
 .menu__tag { font-family: var(--f-script); font-size: clamp(2rem, 3vw, 2.8rem); margin: 0; line-height: 1; }
 .menu__meta { font-family: var(--f-sans); font-size: .72rem; letter-spacing: .14em; color: var(--sage); }
 .menu__meta p { margin: .3rem 0 0; }
