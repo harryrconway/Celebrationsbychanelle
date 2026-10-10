@@ -1,1 +1,3 @@
 .DS_Store
+# Full-size camera originals stay local; the site uses resized copies
+images/DSC*
