@@ -72,7 +72,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 
 Slot names are listed at the top of `style.css`. In use: `about-blue`, `chanelle-jed`, `menu`. Waiting for files: `about-brown`, `resources`, `process`, `contact`, `footer`.
 
-The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it.
+The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it. It is dressed with a soft glow, a hairline frame, two sand sprigs in the lower corners (smaller on phones, hidden on short phones) and a "Scroll" cue, so keep those clear of the text if the copy grows.
 
 To add a photo:
 1. **Never commit camera originals.** `images/DSC*` is git-ignored on purpose (15+ MB each).
