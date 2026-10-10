@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-33G2rEV1aFBrPUTZsplrjh7PThkZbZ/JLmo05GX4SCo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; form-action 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Wedding Planning Checklist | Celebrations by Chanelle</title>
   <meta name="description" content="A printable wedding ceremony planning checklist from Celebrations by Chanelle.">
   <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
@@ -52,7 +54,7 @@
   <main>
     <div class="actions">
       <a href="../#resources">&larr; Back to the website</a>
-      <button type="button" onclick="window.print()">Print / save as PDF</button>
+      <button type="button" data-print>Print / save as PDF</button>
     </div>
 
     <section>
@@ -127,5 +129,6 @@
     <span class="script">Love · Legacy · You</span>
     hello@celebrationsbychanelle.com.au · Gold Coast &amp; beyond
   </footer>
+  <script>document.querySelector('[data-print]').addEventListener('click', () => window.print());</script>
 </body>
 </html>
