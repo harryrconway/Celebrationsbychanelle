@@ -111,10 +111,8 @@
     setTimeout(finishLoading, 2600); // never hold the page hostage to slow assets
   }
 
-  /* ---------- Header + hero parallax ---------- */
+  /* ---------- Header ---------- */
   const header = $('.header');
-  const heroBg = reduceMotion ? null : $('.hero__bg');
-  let viewportH = window.innerHeight;
   let scrolled = null;
   let ticking = false;
   function onScroll() {
@@ -123,8 +121,6 @@
       scrolled = y > 40;
       header.classList.toggle('is-scrolled', scrolled);
     }
-    // Parallax only while the hero is on screen
-    if (heroBg && y < viewportH * 1.2) heroBg.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
     ticking = false;
   }
   window.addEventListener('scroll', () => {
@@ -202,7 +198,6 @@
   });
 
   window.addEventListener('resize', () => {
-    viewportH = window.innerHeight;
     if (isMenuOpen()) setMenuOrigin();
   }, { passive: true });
 

@@ -19,7 +19,6 @@ input[type="checkbox"] { appearance: none; -webkit-appearance: none; flex-shrink
 input[type="checkbox"]:checked { background: var(--green); }
 input[type="checkbox"]:checked::after { content: ''; width: .35rem; height: .6rem; border: solid var(--sand); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
 input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--sand); }
-.notes { border: 1px solid var(--line); min-height: 8rem; padding: 1rem; background: #fffdf9; }
 footer { text-align: center; color: var(--muted); padding-bottom: 3rem; }
 footer .script { font-size: 2rem; color: var(--green); display: block; }
 @media print {

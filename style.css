@@ -2,7 +2,7 @@
    Celebrations by Chanelle
    ---------------------------------------------------------
    PHOTO SLOTS: each photo is a .jpg (plus a smaller .webp) in /images.
-   In use:   hero (Home), about-blue (About), chanelle-jed (Love Story), menu (menu panel)
+   In use:   about-blue (About), chanelle-jed (Love Story), menu (menu panel)
    Waiting:  about-brown, resources, process, contact, footer.
              Add the file, then uncomment its line in "Photo for each slot".
    ========================================================= */
@@ -158,11 +158,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    they load normally. WebP is used where supported, JPG otherwise. */
 :is(.is-near, .is-primed, html:not(.js)) .img-about-blue { --img: url("images/about-blue.jpg"); }
 :is(.is-near, .is-primed, html:not(.js)) .img-chanelle-jed { --img: url("images/chanelle-jed.jpg"); }
-:is(.is-near, .is-primed, html:not(.js)) .img-hero { --img: url("images/hero.jpg"); }
 @supports (background-image: image-set(url("a.webp") type("image/webp"))) {
   :is(.is-near, .is-primed, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue.webp") type("image/webp"), url("images/about-blue.jpg") type("image/jpeg")); }
   :is(.is-near, .is-primed, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed.webp") type("image/webp"), url("images/chanelle-jed.jpg") type("image/jpeg")); }
-  :is(.is-near, .is-primed, html:not(.js)) .img-hero { --img: image-set(url("images/hero.webp") type("image/webp"), url("images/hero.jpg") type("image/jpeg")); }
 }
 .img-chanelle-jed { --img-pos: center 28%; }
 /* Slots waiting for photos. Add the file to /images, then uncomment its line:
@@ -457,28 +455,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    01 HERO
    ========================================================= */
 .hero { display: flex; flex-direction: column; color: var(--cream); background: var(--green-deep); }
-.hero__bg { position: absolute; inset: -6% 0 -6%; will-change: transform; }
-.hero__bg .ph {
-  position: absolute; inset: 0;
-  /* Scaled up slightly so Chanelle sits in the left third and the text has the sky */
-  --img-size: auto 125%; --img-pos: 100% 35%;
-  --art-pos: left 4% bottom 10%; --art-size: auto 85%;
-}
-@media (min-aspect-ratio: 15/8) { .hero__bg .ph { --img-size: cover; --img-pos: 20% 35%; } }
-.hero__veil {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(90deg, rgba(23, 47, 35, .05) 0%, rgba(23, 47, 35, .35) 45%, rgba(23, 47, 35, .78) 100%),
-    linear-gradient(0deg, rgba(23, 47, 35, .55) 0%, transparent 35%),
-    linear-gradient(180deg, rgba(23, 47, 35, .45) 0%, transparent 22%);
-}
+/* The title fills the whole first screen, centred; the values strip follows below */
 .hero__content {
-  position: relative; flex: 1;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   text-align: center;
-  width: min(100%, 52rem);
-  margin-left: auto;
-  padding: calc(var(--header-h) + 2rem) var(--gutter) 3rem;
+  width: 100%;
+  min-height: 100vh; min-height: 100svh;
+  padding: calc(var(--header-h) + 1rem) var(--gutter);
 }
 .hero__title { margin-bottom: 1.6rem; }
 .hero__title .script {
@@ -486,7 +469,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   font-size: clamp(4.4rem, 11.5vw, 11rem);
   line-height: .95;
   color: var(--sand);
-  text-shadow: 0 4px 40px rgba(0, 0, 0, .25);
   padding: 0 .1em;
 }
 .hero__by {
@@ -1083,13 +1065,6 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
   .story__media { min-height: 70svh; }
   .story__text { padding: 3.5rem var(--gutter) 4rem; }
 
-  /* Text drops to the lower half so Chanelle's face stays clear above it */
-  .hero__content { margin: 0 auto; justify-content: flex-end; padding-bottom: clamp(1.5rem, 4vh, 3rem); }
-  .hero__bg .ph { --img-size: cover; --img-pos: 43% 30%; }
-  .hero__veil {
-    background:
-      linear-gradient(0deg, rgba(23, 47, 35, .85) 0%, rgba(23, 47, 35, .35) 55%, rgba(23, 47, 35, .55) 100%);
-  }
   .values { grid-template-columns: repeat(2, 1fr); }
   .values li:nth-child(3) { border-left: 0; }
   .values li:nth-child(n+3) { border-top: 1px solid var(--line); }
@@ -1104,8 +1079,6 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
   .menu__label { font-size: clamp(1.6rem, min(8.2vw, 6.5vh), 3rem); }
   .menu__script { display: none; }
 
-  /* Photo and title get the whole first screen; the values strip follows below */
-  .hero__content { min-height: 100vh; min-height: 100svh; }
   .values li { padding: 1.1rem .7rem; }
   .values p { font-size: .9rem; }
   .values .icon { width: 1.6rem; height: 1.6rem; margin-bottom: .5rem; }
@@ -1122,11 +1095,6 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
   .footer__grid { grid-template-columns: 1fr 1fr; }
   .footer__grid > .footer__col:last-child { grid-column: 1 / -1; }
   .footer__bar { justify-content: center; text-align: center; }
-}
-
-/* Short phones: keep the hero title clear of Chanelle's face */
-@media (max-width: 600px) and (max-height: 700px) {
-  .hero .eyebrow { display: none; }
 }
 
 /* ---------- Reduced motion ---------- */
