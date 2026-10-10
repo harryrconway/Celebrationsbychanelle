@@ -462,17 +462,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   text-align: center;
   width: 100%;
   min-height: 100vh; min-height: 100svh;
-  padding: calc(var(--header-h) + 1rem) calc(var(--gutter) + 1rem);
+  padding: calc(var(--header-h) + 1rem) var(--gutter);
   background:
     radial-gradient(45% 40% at 50% 46%, rgba(217, 201, 183, .1), transparent 70%),
     radial-gradient(70% 80% at 100% 0%, rgba(107, 79, 59, .32), transparent 60%),
     radial-gradient(70% 80% at 0% 100%, rgba(42, 77, 59, .7), transparent 60%);
-}
-/* Invitation-style hairline frame, clear of the header */
-.hero__frame {
-  position: absolute; z-index: -1;
-  inset: calc(var(--header-h) + .5rem) var(--gutter) clamp(1.25rem, 4vh, 2.5rem);
-  border: 1px solid rgba(217, 201, 183, .22);
 }
 .hero__sprig {
   position: absolute; z-index: -1;
