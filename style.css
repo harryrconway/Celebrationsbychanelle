@@ -17,6 +17,7 @@
   --brown: #6B4F3B;
   --cream: #F8F6F1;
   --paper: #FFFDF9;
+  --linen: #F1EBE2;
   --ink: #26332B;
   --muted: #5D6A60;
   --line: rgba(31, 61, 46, .14);
@@ -649,20 +650,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* =========================================================
    05 PROCESS
    ========================================================= */
-.process { display: flex; flex-direction: column; background: var(--cream); }
-.process__banner {
-  height: 26vh; min-height: 12rem; flex-shrink: 0;
-  --img-pos: center 60%; --art-pos: right 4% bottom -30%;
-  --ph-glow:
-    radial-gradient(60% 80% at 50% 0%, rgba(248, 246, 241, .45), transparent 60%),
-    linear-gradient(180deg, #A9BBBE 0%, #7F9A9C 45%, #D9C9B7 70%, #B9A48E 100%);
-}
+.process { display: flex; flex-direction: column; background: var(--linen); }
+.process__banner { height: 26vh; min-height: 12rem; flex-shrink: 0; --img-pos: center 60%; }
 .process__body {
   flex: 1;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr);
   gap: clamp(2rem, 5vw, 6rem); align-items: center;
   padding: clamp(2.5rem, 6vh, 4.5rem) var(--gutter);
 }
+/* Without the photo banner, start the content below the fixed header */
+.process__banner[hidden] + .process__body { padding-top: calc(var(--header-h) + clamp(1.5rem, 5vh, 3.5rem)); }
 .process__intro > p { color: var(--muted); max-width: 26rem; }
 .process__sub { font-family: var(--f-sans); font-size: .66rem; letter-spacing: .32em; text-transform: uppercase; color: var(--brown) !important; margin-top: -.4rem; }
 .process__script { font-size: clamp(2rem, 3.2vw, 2.8rem); line-height: 1.05; color: var(--green) !important; transform: rotate(-4deg); transform-origin: left; margin: .6rem 0 1.2rem; }
@@ -688,7 +685,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   width: 2.9rem; height: 2.9rem; border-radius: 50%;
   background: var(--green); color: var(--sand);
   font-family: var(--f-serif); font-size: 1.1rem; font-weight: 500;
-  box-shadow: 0 0 0 6px var(--cream);
+  box-shadow: 0 0 0 6px var(--linen);
 }
 .timeline h3 {
   font-family: var(--f-sans); font-size: .7rem; font-weight: 600;
