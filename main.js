@@ -26,7 +26,7 @@
   /* ---------- Apply settings ---------- */
   // Only plain addresses and https links are ever written into the page
   const SAFE_EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,24}$/;
-  const SAFE_URL = /^https:\/\/[A-Za-z0-9.-]+(\/[A-Za-z0-9._~%@\/-]*)?$/;
+  const SAFE_URL = /^https:\/\/[A-Za-z0-9.-]+(\/[A-Za-z0-9._~%@/-]*)?$/;
   if (SAFE_EMAIL.test(CONFIG.email)) {
     $$('[data-email]').forEach((a) => {
       a.href = `mailto:${CONFIG.email}`;
@@ -38,15 +38,32 @@
     if (url && SAFE_URL.test(url)) a.href = url;
     else a.closest('li')?.remove();
   });
-  $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
+  $$('[data-year]').forEach((node) => { node.textContent = new Date().getFullYear(); });
+
+  const sections = $$('.section');
+  const hasObserver = 'IntersectionObserver' in window;
+
+  /* ---------- Lazy photos ---------- */
+  // Section photos only download when their section is within ~3/4 of a screen of view
+  if (hasObserver) {
+    const nearObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-near');
+        nearObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: '75% 0px' });
+    sections.forEach((s) => nearObserver.observe(s));
+  } else {
+    sections.forEach((s) => s.classList.add('is-near'));
+  }
 
   /* ---------- Reveal on scroll ---------- */
   function startReveal() {
     const items = $$('[data-reveal]');
-    const sections = $$('.section');
 
-    if (reduceMotion || !('IntersectionObserver' in window)) {
-      items.forEach((el) => el.classList.add('is-visible'));
+    if (reduceMotion || !hasObserver) {
+      items.forEach((item) => item.classList.add('is-visible'));
       sections.forEach((s) => s.classList.add('is-inview'));
       return;
     }
@@ -60,7 +77,7 @@
         itemObserver.unobserve(entry.target);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-    items.forEach((el) => itemObserver.observe(el));
+    items.forEach((item) => itemObserver.observe(item));
 
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -89,14 +106,18 @@
 
   /* ---------- Header + hero parallax ---------- */
   const header = $('.header');
-  const heroBg = $('.hero__bg');
+  const heroBg = reduceMotion ? null : $('.hero__bg');
+  let viewportH = window.innerHeight;
+  let scrolled = null;
   let ticking = false;
   function onScroll() {
     const y = window.scrollY;
-    header.classList.toggle('is-scrolled', y > 40);
-    if (heroBg && !reduceMotion && y < window.innerHeight * 1.2) {
-      heroBg.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
+    if ((y > 40) !== scrolled) {
+      scrolled = y > 40;
+      header.classList.toggle('is-scrolled', scrolled);
     }
+    // Parallax only while the hero is on screen
+    if (heroBg && y < viewportH * 1.2) heroBg.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
     ticking = false;
   }
   window.addEventListener('scroll', () => {
@@ -110,7 +131,13 @@
   const toggleLabel = $('.menu-toggle__label');
   const menuLinks = $$('.menu__list a');
   const menuImages = $$('.menu__img');
+  const menuFocusables = [toggle, ...$$('a[href], button', menu)];
   let lastFocus = null;
+
+  // Menu photos only download once the visitor reaches for the menu
+  const primeMenu = () => menu.classList.add('is-primed');
+  toggle.addEventListener('pointerenter', primeMenu, { once: true });
+  toggle.addEventListener('focus', primeMenu, { once: true });
 
   const isMenuOpen = () => menu.classList.contains('is-open');
 
@@ -126,6 +153,7 @@
 
   function openMenu() {
     lastFocus = document.activeElement;
+    primeMenu();
     setMenuOrigin();
     menu.classList.add('is-open');
     menu.setAttribute('aria-hidden', 'false');
@@ -159,15 +187,17 @@
     if (e.key === 'Escape') { e.preventDefault(); closeMenu(); return; }
     if (e.key !== 'Tab') return;
     // Keep focus inside the menu (plus the close toggle)
-    const focusables = [toggle, ...$$('a[href], button:not([disabled])', menu)];
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
+    const first = menuFocusables[0];
+    const last = menuFocusables[menuFocusables.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    else if (!focusables.includes(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (!menuFocusables.includes(document.activeElement)) { e.preventDefault(); first.focus(); }
   });
 
-  window.addEventListener('resize', () => { if (isMenuOpen()) setMenuOrigin(); });
+  window.addEventListener('resize', () => {
+    viewportH = window.innerHeight;
+    if (isMenuOpen()) setMenuOrigin();
+  }, { passive: true });
 
   /* ---------- Smooth anchor scrolling ---------- */
   function scrollToTarget(target) {
@@ -199,7 +229,6 @@
   /* ---------- Active section tracking (menu + dots) ---------- */
   const dots = $('.dots');
   const dotLinks = $$('a', dots);
-  const tracked = $$('main .section, .footer');
 
   function setActive(section) {
     const id = section.id;
@@ -213,11 +242,11 @@
     dots.classList.toggle('is-hidden', id === 'footer');
   }
 
-  if ('IntersectionObserver' in window) {
+  if (hasObserver) {
     const activeObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => { if (entry.isIntersecting) setActive(entry.target); });
     }, { rootMargin: '-50% 0px -50% 0px' });
-    tracked.forEach((s) => activeObserver.observe(s));
+    sections.forEach((s) => activeObserver.observe(s));
   }
 
   /* ---------- Resource drawers ---------- */
@@ -289,8 +318,10 @@
     const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
     return new Date(first.getFullYear(), first.getMonth(), Math.min(d.getDate(), lastDay));
   };
-  const formatLong = (d) => d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  const formatShort = (d) => d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+  const LONG_DATE = new Intl.DateTimeFormat('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const SHORT_DATE = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+  const MONTH_YEAR = new Intl.DateTimeFormat('en-AU', { month: 'long', year: 'numeric' });
+  const formatLong = (d) => LONG_DATE.format(d);
   const WEEKDAYS = [['Mo', 'Monday'], ['Tu', 'Tuesday'], ['We', 'Wednesday'], ['Th', 'Thursday'], ['Fr', 'Friday'], ['Sa', 'Saturday'], ['Su', 'Sunday']];
 
   function enhanceDate(native) {
@@ -344,7 +375,7 @@
     if (label) label.htmlFor = display.id;
 
     function render() {
-      title.textContent = view.toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
+      title.textContent = MONTH_YEAR.format(view);
       prev.disabled = view <= new Date(min.getFullYear(), min.getMonth(), 1);
       next.disabled = view >= new Date(max.getFullYear(), max.getMonth(), 1);
       const offset = (view.getDay() + 6) % 7; // weeks start on Monday
@@ -374,7 +405,9 @@
       tbody.replaceChildren(...rows);
     }
 
-    const focusDay = () => $(`[data-date="${toISO(focusDate)}"]`, tbody)?.focus();
+    const dayButton = (d) => $(`[data-date="${toISO(d)}"]`, tbody);
+    const focusDay = () => dayButton(focusDate)?.focus();
+    const onOutside = (e) => { if (!wrap.contains(e.target)) close(false); };
 
     function open() {
       focusDate = clamp(selected || today);
@@ -384,6 +417,7 @@
       wrap.classList.add('is-open');
       display.setAttribute('aria-expanded', 'true');
       placePopup(wrap, pop);
+      document.addEventListener('pointerdown', onOutside);
       focusDay();
     }
 
@@ -392,21 +426,27 @@
       pop.hidden = true;
       wrap.classList.remove('is-open', 'is-up');
       display.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('pointerdown', onOutside);
       if (returnFocus) display.focus();
     }
 
     function setValue(date) {
       selected = date;
       hidden.value = date ? toISO(date) : '';
-      display.value = date ? formatShort(date) : '';
+      display.value = date ? SHORT_DATE.format(date) : '';
     }
 
     function moveTo(date) {
-      focusDate = clamp(date);
-      if (focusDate.getMonth() !== view.getMonth() || focusDate.getFullYear() !== view.getFullYear()) {
+      const target = clamp(date);
+      if (target.getMonth() === view.getMonth() && target.getFullYear() === view.getFullYear()) {
+        dayButton(focusDate)?.setAttribute('tabindex', '-1');
+        focusDate = target;
+        dayButton(focusDate)?.setAttribute('tabindex', '0');
+      } else {
+        focusDate = target;
         view = new Date(focusDate.getFullYear(), focusDate.getMonth(), 1);
+        render();
       }
-      render();
       focusDay();
     }
 
@@ -456,7 +496,6 @@
     wrap.addEventListener('focusout', (e) => {
       if (e.relatedTarget && !wrap.contains(e.relatedTarget)) close(false);
     });
-    document.addEventListener('pointerdown', (e) => { if (!wrap.contains(e.target)) close(false); });
 
     return () => setValue(null);
   }
@@ -507,7 +546,7 @@
       items.forEach((li, n) => li.setAttribute('aria-selected', String(n === i && Boolean(opts[i].value))));
     }
 
-    function setActive(i) {
+    function highlight(i) {
       active = Math.min(Math.max(i, 0), items.length - 1);
       const li = items[active];
       items.forEach((item) => item.classList.toggle('is-active', item === li));
@@ -518,13 +557,16 @@
       }
     }
 
+    const onOutside = (e) => { if (!wrap.contains(e.target)) close(); };
+
     function open() {
       if (!list.hidden) return;
       list.hidden = false;
+      document.addEventListener('pointerdown', onOutside);
       wrap.classList.add('is-open');
       combo.setAttribute('aria-expanded', 'true');
       placePopup(wrap, list);
-      setActive(Math.max(0, native.selectedIndex));
+      highlight(Math.max(0, native.selectedIndex));
     }
 
     function close() {
@@ -533,6 +575,7 @@
       wrap.classList.remove('is-open', 'is-up');
       combo.setAttribute('aria-expanded', 'false');
       combo.removeAttribute('aria-activedescendant');
+      document.removeEventListener('pointerdown', onOutside);
     }
 
     function choose(i) {
@@ -550,7 +593,7 @@
       const order = items.map((_, n) => (start + (typed.length > 1 ? 0 : 1) + n) % items.length);
       const match = order.find((n) => opts[n].value && opts[n].textContent.toLowerCase().startsWith(typed));
       if (match === undefined) return;
-      if (list.hidden) choose(match); else setActive(match);
+      if (list.hidden) choose(match); else highlight(match);
     }
 
     combo.addEventListener('keydown', (e) => {
@@ -558,15 +601,15 @@
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          if (isOpen) setActive(active + 1); else open();
+          if (isOpen) highlight(active + 1); else open();
           break;
         case 'ArrowUp':
           e.preventDefault();
-          if (isOpen) setActive(active - 1); else open();
+          if (isOpen) highlight(active - 1); else open();
           break;
         case 'Home':
         case 'End':
-          if (isOpen) { e.preventDefault(); setActive(e.key === 'Home' ? 0 : items.length - 1); }
+          if (isOpen) { e.preventDefault(); highlight(e.key === 'Home' ? 0 : items.length - 1); }
           break;
         case 'Enter':
         case ' ':
@@ -591,19 +634,19 @@
       if (li) { choose(items.indexOf(li)); combo.focus(); }
     });
     list.addEventListener('pointermove', (e) => {
-      const li = e.target.closest('.select__option');
-      if (li && items.indexOf(li) !== active) setActive(items.indexOf(li));
+      const i = items.indexOf(e.target.closest('.select__option'));
+      if (i >= 0 && i !== active) highlight(i);
     });
-    document.addEventListener('pointerdown', (e) => { if (!wrap.contains(e.target)) close(); });
 
     sync();
     return sync;
   }
 
   /* ---------- Enquiry form ---------- */
-  // Invisible / text-disguising characters: control codes, zero-width characters,
-  // bidirectional overrides ("Trojan Source" tricks) and filler glyphs.
-  const INVISIBLE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u00AD\u034F\u061C\u115F\u1160\u17B4\u17B5\u180B-\u180F\u200B-\u200F\u202A-\u202E\u2060-\u206F\u3164\uFE00-\uFE0E\uFEFF\uFFA0\uFFF0-\uFFFB]/g;
+  // Invisible / text-disguising characters: control codes (except tab and line breaks),
+  // zero-width characters, bidirectional overrides ("Trojan Source" tricks), variation
+  // selectors and filler glyphs.
+  const INVISIBLE = /(?![\t\n\r])[\p{Cc}\p{Cf}\p{Default_Ignorable_Code_Point}]/gu;
   const EMAIL_RE = /^(?=.{6,254}$)(?=[^@]{1,64}@)[A-Za-z0-9_%+-]+(?:\.[A-Za-z0-9_%+-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,24}$/;
   const NAME_STRIP = /[^\p{L}\p{M}' ’.-]/gu;
   const countLetters = (v) => (v.match(/\p{L}/gu) || []).length;
@@ -646,8 +689,8 @@
     },
     message: {
       max: 2000, single: false,
-      strip: /[^\p{L}\p{M}\p{N}\p{Extended_Pictographic}\uFE0F \n.,!?'’‘"“”():;&/@#$%+*…–—-]/gu,
-      hint: 'That symbol isn’t allowed here.',
+      strip: /[^\p{L}\p{M}\p{N} \n.,!?'’‘"“”():;&/@#$%+*…–—-]/gu,
+      hint: 'Letters, numbers and everyday punctuation only (no emoji or code symbols).',
       check: () => true,
     },
   };
@@ -710,13 +753,15 @@
     };
     const isRateLimited = () => Date.now() - lastSent < COOLDOWN_MS || readTimes().length >= MAX_PER_HOUR;
 
+    const parts = new Map(); // input -> { field, msg }
+
     function validateField(input) {
-      const field = input.closest('.field');
+      const { field, msg } = parts.get(input);
       const result = FIELD_RULES[input.name].check(finalise(input.name, input.value));
       const ok = result === true;
       field.classList.toggle('has-error', !ok);
       input.setAttribute('aria-invalid', String(!ok));
-      $('.field__msg', field).textContent = ok ? '' : result;
+      msg.textContent = ok ? '' : result;
       return ok;
     }
 
@@ -725,6 +770,7 @@
       const field = input.closest('.field');
       const msg = el('p', { class: 'field__msg', id: `msg-${input.name}`, 'aria-live': 'polite' });
       field.append(msg);
+      parts.set(input, { field, msg });
       input.setAttribute('aria-describedby', msg.id);
       let composing = false;
       let hintTimer;
@@ -766,10 +812,10 @@
     form.addEventListener('reset', () => setTimeout(() => {
       resetHooks.forEach((fn) => fn());
       textInputs.forEach((input) => {
-        const field = input.closest('.field');
+        const { field, msg } = parts.get(input);
         field.classList.remove('has-error', 'has-hint');
         input.removeAttribute('aria-invalid');
-        $('.field__msg', field).textContent = '';
+        msg.textContent = '';
       });
     }, 0));
 
@@ -850,7 +896,7 @@
         }
         recordSend();
         form.reset();
-      } catch (err) {
+      } catch {
         status.textContent = `Something went wrong — please email ${CONFIG.email} directly.`;
       } finally {
         submit.disabled = false;

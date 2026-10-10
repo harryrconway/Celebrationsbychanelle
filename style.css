@@ -1,16 +1,10 @@
 /* =========================================================
    Celebrations by Chanelle
    ---------------------------------------------------------
-   PHOTO SLOTS — drop photos into /images with these names
-   and they appear automatically (placeholders show until then):
-     hero.jpg            Home hero — Chanelle (later: a couple)
-     about-brown.jpg     About — Chanelle, brown dress
-     about-blue.jpg      About — Chanelle, blue dress (small framed)
-     chanelle-jed.jpg    Love Story — Chanelle & Jed
-     resources.jpg       Getting Married — flowers / books / mic
-     process.jpg         How I Work — beach ceremony / arbour
-     contact.jpg         Contact — coastline
-     footer.jpg          Footer — beach path at sunset
+   PHOTO SLOTS: each photo is a .jpg (plus a smaller .webp) in /images.
+   In use:   about-blue (About), chanelle-jed (Love Story), menu (menu panel)
+   Waiting:  hero, about-brown, resources, process, contact, footer.
+             Add the file, then uncomment its line in "Photo for each slot".
    ========================================================= */
 
 :root {
@@ -158,15 +152,24 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background-repeat: no-repeat;
 }
 
-/* Photo for each slot (see list at top of file) */
-.img-about-blue { --img: url("images/about-blue.jpg"); }
-.img-about-brown { --img: url("images/about-brown.jpg"); }
-.img-chanelle-jed { --img: url("images/chanelle-jed.jpg"); --img-pos: center 28%; }
-.img-contact { --img: url("images/contact.jpg"); }
-.img-footer { --img: url("images/footer.jpg"); }
-.img-hero { --img: url("images/hero.jpg"); }
-.img-process { --img: url("images/process.jpg"); }
-.img-resources { --img: url("images/resources.jpg"); }
+/* Photo for each slot. A photo only downloads once its section is close to the screen
+   of view (.is-near) or the menu is about to open (.is-primed); without JavaScript
+   they load normally. WebP is used where supported, JPG otherwise. */
+:is(.is-near, .is-primed, html:not(.js)) .img-about-blue { --img: url("images/about-blue.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-chanelle-jed { --img: url("images/chanelle-jed.jpg"); }
+@supports (background-image: image-set(url("a.webp") type("image/webp"))) {
+  :is(.is-near, .is-primed, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue.webp") type("image/webp"), url("images/about-blue.jpg") type("image/jpeg")); }
+  :is(.is-near, .is-primed, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed.webp") type("image/webp"), url("images/chanelle-jed.jpg") type("image/jpeg")); }
+}
+.img-chanelle-jed { --img-pos: center 28%; }
+/* Slots waiting for photos. Add the file to /images, then uncomment its line:
+:is(.is-near, .is-primed, html:not(.js)) .img-about-brown { --img: url("images/about-brown.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-contact { --img: url("images/contact.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-footer { --img: url("images/footer.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-hero { --img: url("images/hero.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-process { --img: url("images/process.jpg"); }
+:is(.is-near, .is-primed, html:not(.js)) .img-resources { --img: url("images/resources.jpg"); }
+*/
 
 /* ---------- Sections ---------- */
 .section {
@@ -389,13 +392,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   transition: opacity .8s var(--ease), transform 1.4s var(--ease);
 }
 .menu__img.is-active { opacity: 1; transform: none; }
-/* Menu photo (ceremony details). Links whose section photo hasn't been added yet
-   show it underneath instead of a placeholder */
-.img-menu { --img: url("images/menu.jpg"); --img-pos: center 42%; }
+/* Menu photo (ceremony details): shown for links whose section photo isn't added yet */
 .menu__img {
-  background-image: var(--img, none), url("images/menu.jpg"), var(--ph-art), var(--ph-glow);
+  background-image: var(--img, none), var(--menu-photo, none), var(--ph-art), var(--ph-glow);
   background-size: cover, cover, var(--art-size, auto 72%), cover, cover, cover;
   background-position: var(--img-pos, center), center 42%, var(--art-pos, right -8% bottom -4%), center, center, center;
+}
+:is(.is-primed, html:not(.js)) .menu__img { --menu-photo: url("images/menu.jpg"); }
+@supports (background-image: image-set(url("a.webp") type("image/webp"))) {
+  :is(.is-primed, html:not(.js)) .menu__img { --menu-photo: image-set(url("images/menu.webp") type("image/webp"), url("images/menu.jpg") type("image/jpeg")); }
 }
 .menu__tag { font-family: var(--f-script); font-size: clamp(2rem, 3vw, 2.8rem); margin: 0; line-height: 1; }
 .menu__meta { font-family: var(--f-sans); font-size: .72rem; letter-spacing: .14em; color: var(--sage); }
