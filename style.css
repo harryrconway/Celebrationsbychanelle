@@ -428,6 +428,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .menu-open .dots, .dots.is-hidden { opacity: 0; pointer-events: none; }
 .dots a {
   position: relative; display: block;
+  filter: drop-shadow(0 0 3px rgba(23, 47, 35, .45)); /* stays visible over bright photos */
   width: .6rem; height: .6rem; border-radius: 50%;
   border: 1px solid var(--dot);
   transition: background-color .4s, transform .4s var(--ease), border-color .4s;
