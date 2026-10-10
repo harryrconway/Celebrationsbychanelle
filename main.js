@@ -68,6 +68,13 @@
       return;
     }
 
+    // The hero text is on screen from the start, so it fades in straight away
+    const heroItems = $$('.hero__content [data-reveal]');
+    heroItems.forEach((item, i) => {
+      item.style.setProperty('--i', i);
+      item.classList.add('is-visible');
+    });
+
     const itemObserver = new IntersectionObserver((entries) => {
       let n = 0;
       entries.forEach((entry) => {
@@ -77,7 +84,7 @@
         itemObserver.unobserve(entry.target);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-    items.forEach((item) => itemObserver.observe(item));
+    items.filter((item) => !heroItems.includes(item)).forEach((item) => itemObserver.observe(item));
 
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

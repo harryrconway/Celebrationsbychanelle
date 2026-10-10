@@ -70,7 +70,9 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 
 ## Photos
 
-Slot names are listed at the top of `style.css`. In use: `about-blue`, `chanelle-jed`, `menu`. Waiting for files: `hero`, `about-brown`, `resources`, `process`, `contact`, `footer`.
+Slot names are listed at the top of `style.css`. In use: `hero`, `about-blue`, `chanelle-jed`, `menu`. Waiting for files: `about-brown`, `resources`, `process`, `contact`, `footer`.
+
+The hero photo is framed per screen size in `style.css` (`.hero__bg .ph`): on desktop it is scaled up (`--img-size`) so Chanelle sits in the left third with the text over the sky, and on tablet and phone the text sits in the lower half below her face. Re-check those crops if the hero photo changes.
 
 To add a photo:
 1. **Never commit camera originals.** `images/DSC*` is git-ignored on purpose (15+ MB each).
