@@ -24,13 +24,18 @@
   const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
   /* ---------- Apply settings ---------- */
-  $$('[data-email]').forEach((a) => {
-    a.href = `mailto:${CONFIG.email}`;
-    a.textContent = CONFIG.email;
-  });
+  // Only plain addresses and https links are ever written into the page
+  const SAFE_EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,24}$/;
+  const SAFE_URL = /^https:\/\/[A-Za-z0-9.-]+(\/[A-Za-z0-9._~%@\/-]*)?$/;
+  if (SAFE_EMAIL.test(CONFIG.email)) {
+    $$('[data-email]').forEach((a) => {
+      a.href = `mailto:${CONFIG.email}`;
+      a.textContent = CONFIG.email;
+    });
+  }
   $$('[data-social]').forEach((a) => {
     const url = CONFIG.socials[a.dataset.social];
-    if (url) a.href = url;
+    if (url && SAFE_URL.test(url)) a.href = url;
     else a.closest('li')?.remove();
   });
   $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
@@ -596,34 +601,184 @@
   }
 
   /* ---------- Enquiry form ---------- */
+  // Invisible / text-disguising characters: control codes, zero-width characters,
+  // bidirectional overrides ("Trojan Source" tricks) and filler glyphs.
+  const INVISIBLE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u00AD\u034F\u061C\u115F\u1160\u17B4\u17B5\u180B-\u180F\u200B-\u200F\u202A-\u202E\u2060-\u206F\u3164\uFE00-\uFE0E\uFEFF\uFFA0\uFFF0-\uFFFB]/g;
+  const EMAIL_RE = /^(?=.{6,254}$)(?=[^@]{1,64}@)[A-Za-z0-9_%+-]+(?:\.[A-Za-z0-9_%+-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,24}$/;
+  const NAME_STRIP = /[^\p{L}\p{M}' ’.-]/gu;
+  const countLetters = (v) => (v.match(/\p{L}/gu) || []).length;
+
+  // Whitelist per field: anything not listed is removed as it's typed, pasted or autofilled
+  const FIELD_RULES = {
+    name: {
+      max: 80, single: true, strip: NAME_STRIP,
+      hint: 'Letters, spaces, apostrophes and hyphens only.',
+      check: (v) => countLetters(v) >= 2 || 'Please enter your name.',
+    },
+    partner: {
+      max: 80, single: true, strip: NAME_STRIP,
+      hint: 'Letters, spaces, apostrophes and hyphens only.',
+      check: (v) => !v || countLetters(v) >= 2 || "Please check your partner's name.",
+    },
+    email: {
+      max: 254, single: true, normalize: 'NFKC', strip: /[^A-Za-z0-9._%+@-]/g,
+      fix: (v) => {
+        const at = v.indexOf('@');
+        return at < 0 ? v : v.slice(0, at + 1) + v.slice(at + 1).replace(/@/g, '');
+      },
+      hint: 'Letters, numbers and . _ % + - @ only.',
+      check: (v) => EMAIL_RE.test(v) || 'Please enter a valid email address.',
+    },
+    phone: {
+      max: 20, single: true, normalize: 'NFKC', strip: /[^0-9+() -]/g,
+      fix: (v) => v.replace(/(?!^)\+/g, ''),
+      hint: 'Numbers, spaces and + ( ) - only.',
+      check: (v) => {
+        if (!v) return true;
+        const digits = v.replace(/\D/g, '').length;
+        return (digits >= 8 && digits <= 15) || 'Please enter a valid phone number.';
+      },
+    },
+    location: {
+      max: 120, single: true, strip: /[^\p{L}\p{M}\p{N} ,.'’&/#()-]/gu,
+      hint: "Letters, numbers and , . ' - & / # ( ) only.",
+      check: (v) => !v || v.replace(/[^\p{L}\p{N}]/gu, '').length >= 2 || 'Please check the location.',
+    },
+    message: {
+      max: 2000, single: false,
+      strip: /[^\p{L}\p{M}\p{N}\p{Extended_Pictographic}\uFE0F \n.,!?'’‘"“”():;&/@#$%+*…–—-]/gu,
+      hint: 'That symbol isn’t allowed here.',
+      check: () => true,
+    },
+  };
+
+  function sanitize(value, rule) {
+    let v = String(value ?? '').normalize(rule.normalize || 'NFC').replace(INVISIBLE, '');
+    v = rule.single
+      ? v.replace(/\s+/g, ' ')
+      : v.replace(/\r\n?|[\u2028\u2029]/g, '\n').replace(/[^\S\n]+/g, ' ').replace(/\n{3,}/g, '\n\n');
+    v = v.replace(rule.strip, '').replace(/ {2,}/g, ' ');
+    if (rule.fix) v = rule.fix(v);
+    return v.slice(0, rule.max);
+  }
+
+  // Final tidy before sending: trim, and remove leading = + - @ from free text so a value
+  // can never run as a formula if enquiries are exported to a spreadsheet (CSV injection)
+  function finalise(name, value) {
+    const v = sanitize(value, FIELD_RULES[name]).trim();
+    return name === 'phone' || name === 'email' ? v : v.replace(/^[=+\-@\s]+/, '').trim();
+  }
+
+  const isValidDate = (iso, min, max) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+    const d = fromISO(iso);
+    return toISO(d) === iso && d >= min && d <= max;
+  };
+
   const form = $('#enquiry-form');
   if (form) {
     const resetHooks = [
       ...$$('input[type="date"]', form).map(enhanceDate),
       ...$$('select', form).map(enhanceSelect),
     ];
-    form.addEventListener('reset', () => setTimeout(() => resetHooks.forEach((fn) => fn()), 0));
 
     const status = $('.form__status', form);
     const submit = $('button[type="submit"]', form);
     const thanks = $('.form__thanks', form);
     const thanksMsg = $('.form__thanks-msg', form);
     const guestOptions = $$('select[name="guests"] option', form).map((o) => o.value);
+    const textInputs = Object.keys(FIELD_RULES).map((name) => form.elements[name]).filter(Boolean);
 
-    const MIN_FILL_MS = 3000;   // submitted faster than this = almost certainly a bot
-    const COOLDOWN_MS = 30000;  // stop accidental double / repeated sends
-    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const MIN_FILL_MS = 3000;      // submitted faster than this = almost certainly a bot
+    const COOLDOWN_MS = 30000;     // stop accidental double / repeated sends
+    const MAX_PER_HOUR = 3;        // per browser
+    const RATE_KEY = 'cbc-enquiry-times';
     const loadedAt = Date.now();
     let lastSent = 0;
     // Only ever post to an https endpoint
     const endpoint = /^https:\/\/[a-z0-9.-]+\/\S+$/i.test(CONFIG.formEndpoint) ? CONFIG.formEndpoint : '';
 
-    // Strip control characters, trim and cap length (a second line of defence behind maxlength)
-    const clean = (value, max) => String(value || '')
-      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
-      .trim()
-      .slice(0, max);
-    const cleanLine = (value, max) => clean(value, max).replace(/\s*[\r\n]+\s*/g, ' ');
+    const readTimes = () => {
+      try {
+        const times = JSON.parse(localStorage.getItem(RATE_KEY) || '[]');
+        return times.filter((t) => Number.isFinite(t) && Date.now() - t < 3600000);
+      } catch { return []; }
+    };
+    const recordSend = () => {
+      lastSent = Date.now();
+      try { localStorage.setItem(RATE_KEY, JSON.stringify([...readTimes(), lastSent])); } catch { /* storage unavailable */ }
+    };
+    const isRateLimited = () => Date.now() - lastSent < COOLDOWN_MS || readTimes().length >= MAX_PER_HOUR;
+
+    function validateField(input) {
+      const field = input.closest('.field');
+      const result = FIELD_RULES[input.name].check(finalise(input.name, input.value));
+      const ok = result === true;
+      field.classList.toggle('has-error', !ok);
+      input.setAttribute('aria-invalid', String(!ok));
+      $('.field__msg', field).textContent = ok ? '' : result;
+      return ok;
+    }
+
+    function bindField(input) {
+      const rule = FIELD_RULES[input.name];
+      const field = input.closest('.field');
+      const msg = el('p', { class: 'field__msg', id: `msg-${input.name}`, 'aria-live': 'polite' });
+      field.append(msg);
+      input.setAttribute('aria-describedby', msg.id);
+      let composing = false;
+      let hintTimer;
+
+      const showHint = () => {
+        msg.textContent = rule.hint;
+        field.classList.add('has-hint');
+        clearTimeout(hintTimer);
+        hintTimer = setTimeout(() => {
+          field.classList.remove('has-hint');
+          if (field.classList.contains('has-error')) validateField(input); else msg.textContent = '';
+        }, 2600);
+      };
+
+      const apply = () => {
+        const before = input.value;
+        const after = sanitize(before, rule);
+        if (after !== before) {
+          const caret = input.selectionStart ?? before.length;
+          const pos = Math.min(sanitize(before.slice(0, caret), rule).length, after.length);
+          input.value = after;
+          try { input.setSelectionRange(pos, pos); } catch { /* field type without a caret */ }
+          // Only flag it when real characters were rejected, not just extra spaces
+          if (before.replace(/\s/g, '').length > after.replace(/\s/g, '').length) showHint();
+        }
+        if (field.classList.contains('has-error')) validateField(input);
+      };
+
+      // Covers typing, paste, drag-and-drop, autofill and voice input; waits for IME composition
+      input.addEventListener('compositionstart', () => { composing = true; });
+      input.addEventListener('compositionend', () => { composing = false; apply(); });
+      input.addEventListener('input', () => { if (!composing) apply(); });
+      input.addEventListener('blur', () => { if (input.value.trim()) validateField(input); });
+      apply(); // tidy anything the browser restored or autofilled before this ran
+    }
+
+    textInputs.forEach(bindField);
+
+    form.addEventListener('reset', () => setTimeout(() => {
+      resetHooks.forEach((fn) => fn());
+      textInputs.forEach((input) => {
+        const field = input.closest('.field');
+        field.classList.remove('has-error', 'has-hint');
+        input.removeAttribute('aria-invalid');
+        $('.field__msg', field).textContent = '';
+      });
+    }, 0));
+
+    // Clickjacking guard: refuse to work if another site has embedded this page in a frame
+    const framed = window.self !== window.top;
+    if (framed) {
+      $$('input, textarea, button, select', form).forEach((control) => { control.disabled = true; });
+      status.textContent = 'For your security, please open this page directly to send an enquiry.';
+    }
 
     const LABELS = {
       name: 'Name', partner: "Partner's name", email: 'Email', phone: 'Phone',
@@ -639,6 +794,7 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (framed) return;
       const raw = new FormData(form);
 
       // Bot traps: hidden honeypot field filled in, or form completed inhumanly fast
@@ -647,28 +803,25 @@
         form.reset();
         return;
       }
-      if (Date.now() - lastSent < COOLDOWN_MS) {
-        status.textContent = 'Your enquiry is already on its way. Please wait a moment before sending another.';
+      if (isRateLimited()) {
+        status.textContent = 'Thanks — your enquiry is on its way. Please wait a little before sending another.';
         return;
       }
 
+      const invalid = textInputs.filter((input) => !validateField(input));
+      if (invalid.length) {
+        status.textContent = 'Please check the highlighted fields.';
+        invalid[0].focus();
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const date = String(raw.get('date') || '');
       const guests = String(raw.get('guests') || '');
-      const fields = {
-        name: cleanLine(raw.get('name'), 80),
-        partner: cleanLine(raw.get('partner'), 80),
-        email: cleanLine(raw.get('email'), 120),
-        phone: cleanLine(raw.get('phone'), 20).replace(/[^0-9+()\s-]/g, ''),
-        date: /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '',
-        location: cleanLine(raw.get('location'), 120),
-        guests: guestOptions.includes(guests) ? guests : '',
-        message: clean(raw.get('message'), 2000),
-      };
-
-      if (!fields.name || !EMAIL_RE.test(fields.email)) {
-        status.textContent = 'Please add your name and a valid email address.';
-        return;
-      }
+      const fields = Object.fromEntries(textInputs.map((input) => [input.name, finalise(input.name, input.value)]));
+      fields.date = isValidDate(date, today, new Date(today.getFullYear() + 4, 11, 31)) ? date : '';
+      fields.guests = guestOptions.includes(guests) ? guests : '';
 
       submit.disabled = true;
       status.textContent = 'Sending…';
@@ -676,13 +829,14 @@
       try {
         if (endpoint) {
           const body = new FormData();
-          Object.entries(fields).forEach(([key, value]) => body.append(key, value));
+          Object.keys(LABELS).forEach((key) => body.append(key, fields[key] || ''));
           body.append('_subject', `Wedding enquiry from ${fields.name}`);
           const res = await fetch(endpoint, {
             method: 'POST',
             body,
             headers: { Accept: 'application/json' },
             credentials: 'omit',
+            redirect: 'error',
           });
           if (!res.ok) throw new Error(`Request failed: ${res.status}`);
           showThanks("I'll be in touch within 24–48 hours.");
@@ -694,7 +848,7 @@
           window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
           showThanks(`Your email app should open with your enquiry ready to send. If it doesn't, email me at ${CONFIG.email}.`);
         }
-        lastSent = Date.now();
+        recordSend();
         form.reset();
       } catch (err) {
         status.textContent = `Something went wrong — please email ${CONFIG.email} directly.`;

@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Celebrations by Chanelle | Gold Coast Marriage Celebrant</title>
   <meta name="description" content="Celebrations by Chanelle — relaxed, romantic and meaningful wedding ceremonies on the Gold Coast and beyond. Authentic. Meaningful. Unforgettable.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw='; style-src 'self'; font-src 'self'; img-src 'self'; connect-src https://formspree.io; form-action 'self' https://formspree.io; base-uri 'none'; object-src 'none'; manifest-src 'self'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="theme-color" content="#1F3D2E">
   <meta property="og:title" content="Celebrations by Chanelle">
   <meta property="og:description" content="More than just a ceremony… it's the start of your forever. Gold Coast marriage celebrant.">
   <meta property="og:type" content="website">
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="style.css">
   <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -87,22 +85,22 @@
     <div class="menu__inner">
       <nav class="menu__nav" aria-label="Main">
         <ol class="menu__list">
-          <li style="--i:0"><a href="#home" data-media="0"><span class="menu__num">01</span><span class="menu__label" data-text="Home">Home</span><span class="menu__script">welcome</span></a></li>
-          <li style="--i:1"><a href="#about" data-media="1"><span class="menu__num">02</span><span class="menu__label" data-text="About">About</span><span class="menu__script">hello, I'm Chanelle</span></a></li>
-          <li style="--i:2"><a href="#story" data-media="2"><span class="menu__num">03</span><span class="menu__label" data-text="Love Story">Love Story</span><span class="menu__script">Jed &amp; I</span></a></li>
-          <li style="--i:3"><a href="#resources" data-media="3"><span class="menu__num">04</span><span class="menu__label" data-text="Getting Married">Getting Married</span><span class="menu__script">the essentials</span></a></li>
-          <li style="--i:4"><a href="#process" data-media="4"><span class="menu__num">05</span><span class="menu__label" data-text="How I Work">How I Work</span><span class="menu__script">step by step</span></a></li>
-          <li style="--i:5"><a href="#contact" data-media="5"><span class="menu__num">06</span><span class="menu__label" data-text="Contact">Contact</span><span class="menu__script">say hi</span></a></li>
+          <li><a href="#home" data-media="0"><span class="menu__num">01</span><span class="menu__label" data-text="Home">Home</span><span class="menu__script">welcome</span></a></li>
+          <li><a href="#about" data-media="1"><span class="menu__num">02</span><span class="menu__label" data-text="About">About</span><span class="menu__script">hello, I'm Chanelle</span></a></li>
+          <li><a href="#story" data-media="2"><span class="menu__num">03</span><span class="menu__label" data-text="Love Story">Love Story</span><span class="menu__script">Jed &amp; I</span></a></li>
+          <li><a href="#resources" data-media="3"><span class="menu__num">04</span><span class="menu__label" data-text="Getting Married">Getting Married</span><span class="menu__script">the essentials</span></a></li>
+          <li><a href="#process" data-media="4"><span class="menu__num">05</span><span class="menu__label" data-text="How I Work">How I Work</span><span class="menu__script">step by step</span></a></li>
+          <li><a href="#contact" data-media="5"><span class="menu__num">06</span><span class="menu__label" data-text="Contact">Contact</span><span class="menu__script">say hi</span></a></li>
         </ol>
       </nav>
       <aside class="menu__aside">
         <div class="menu__media" aria-hidden="true">
-          <div class="menu__img ph is-active" data-index="0" style="--img:url(images/hero.jpg)"></div>
-          <div class="menu__img ph" data-index="1" style="--img:url(images/about-brown.jpg)"></div>
-          <div class="menu__img ph" data-index="2" style="--img:url(images/chanelle-jed.jpg); --img-pos:center 30%"></div>
-          <div class="menu__img ph" data-index="3" style="--img:url(images/resources.jpg)"></div>
-          <div class="menu__img ph" data-index="4" style="--img:url(images/process.jpg)"></div>
-          <div class="menu__img ph" data-index="5" style="--img:url(images/contact.jpg)"></div>
+          <div class="menu__img ph is-active img-hero" data-index="0"></div>
+          <div class="menu__img ph img-about-brown" data-index="1"></div>
+          <div class="menu__img ph img-chanelle-jed" data-index="2"></div>
+          <div class="menu__img ph img-resources" data-index="3"></div>
+          <div class="menu__img ph img-process" data-index="4"></div>
+          <div class="menu__img ph img-contact" data-index="5"></div>
         </div>
         <p class="menu__tag">Love · Legacy · You</p>
         <div class="menu__meta">
@@ -134,7 +132,7 @@
     <!-- ============ 01 HOME ============ -->
     <section class="section hero" id="home" data-tone="dark" aria-label="Welcome">
       <div class="hero__bg" aria-hidden="true">
-        <div class="ph" style="--img:url(images/hero.jpg)"></div>
+        <div class="ph img-hero"></div>
       </div>
       <div class="hero__veil" aria-hidden="true"></div>
 
@@ -171,14 +169,14 @@
         </div>
       </div>
       <div class="about__media">
-        <div class="about__photo ph" style="--img:url(images/about-brown.jpg)" role="img" aria-label="Chanelle smiling by the ocean"></div>
-        <div class="about__photo--small ph" style="--img:url(images/about-blue.jpg)" role="img" aria-label="Portrait of Chanelle in a blue dress" data-reveal></div>
+        <div class="about__photo ph img-about-brown" role="img" aria-label="Chanelle smiling by the ocean"></div>
+        <div class="about__photo--small ph img-about-blue" role="img" aria-label="Portrait of Chanelle in a blue dress" data-reveal></div>
       </div>
     </section>
 
     <!-- ============ 03 OUR LOVE STORY ============ -->
     <section class="section story" id="story" data-tone="light" aria-labelledby="story-title">
-      <div class="story__media ph" style="--img:url(images/chanelle-jed.jpg); --img-pos:center 28%" role="img" aria-label="Chanelle and Jed hugging and smiling on the beach"></div>
+      <div class="story__media ph img-chanelle-jed" role="img" aria-label="Chanelle and Jed hugging and smiling on the beach"></div>
       <div class="story__text">
         <svg class="story__sprig" aria-hidden="true"><use href="#i-sprig"/></svg>
         <p class="eyebrow eyebrow--dark" data-reveal>Our love story · My favourite person</p>
@@ -193,7 +191,7 @@
     <!-- ============ 04 GETTING MARRIED / RESOURCES ============ -->
     <section class="section resources" id="resources" data-tone="light" aria-labelledby="resources-title">
       <div class="resources__intro">
-        <div class="ph resources__bg" style="--img:url(images/resources.jpg)" aria-hidden="true"></div>
+        <div class="ph resources__bg img-resources" aria-hidden="true"></div>
         <div class="resources__veil" aria-hidden="true"></div>
         <div class="resources__intro-text">
           <p class="eyebrow" data-reveal>Everything you need to know</p>
@@ -226,7 +224,7 @@
 
     <!-- ============ 05 HOW I WORK ============ -->
     <section class="section process" id="process" data-tone="light" aria-labelledby="process-title">
-      <div class="process__banner ph" style="--img:url(images/process.jpg)" role="img" aria-label="Beach wedding arbour overlooking the ocean"></div>
+      <div class="process__banner ph img-process" role="img" aria-label="Beach wedding arbour overlooking the ocean"></div>
       <div class="process__body">
         <div class="process__intro">
           <p class="eyebrow eyebrow--dark" data-reveal>My process</p>
@@ -254,7 +252,7 @@
     <!-- ============ 06 CONTACT ============ -->
     <section class="section contact" id="contact" data-tone="light" aria-labelledby="contact-title">
       <div class="contact__aside">
-        <div class="ph contact__bg" style="--img:url(images/contact.jpg)" aria-hidden="true"></div>
+        <div class="ph contact__bg img-contact" aria-hidden="true"></div>
         <div class="contact__veil" aria-hidden="true"></div>
         <div class="contact__aside-inner">
           <p class="eyebrow" data-reveal>Let's make it official</p>
@@ -270,15 +268,15 @@
       </div>
 
       <div class="contact__form-wrap">
-        <form class="form" id="enquiry-form" method="post" data-reveal>
+        <form class="form" id="enquiry-form" method="post" novalidate data-reveal>
           <noscript><p class="form__status">Prefer email? Write to hello@celebrationsbychanelle.com.au</p></noscript>
           <div class="form__grid">
-            <label class="field"><span>Your name *</span><input type="text" name="name" autocomplete="name" maxlength="80" required></label>
-            <label class="field"><span>Partner's name</span><input type="text" name="partner" autocomplete="off" maxlength="80"></label>
-            <label class="field"><span>Email *</span><input type="email" name="email" autocomplete="email" maxlength="120" required></label>
-            <label class="field"><span>Phone</span><input type="tel" name="phone" autocomplete="tel" maxlength="20" pattern="[0-9+()\s\-]{6,20}" title="Numbers, spaces and + ( ) - only"></label>
+            <label class="field"><span>Your name *</span><input type="text" name="name" autocomplete="name" autocapitalize="words" spellcheck="false" maxlength="80" required></label>
+            <label class="field"><span>Partner's name</span><input type="text" name="partner" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="80"></label>
+            <label class="field"><span>Email *</span><input type="text" name="email" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="254" required></label>
+            <label class="field"><span>Phone</span><input type="tel" name="phone" inputmode="tel" autocomplete="tel" spellcheck="false" maxlength="20"></label>
             <div class="field"><label for="f-date">Wedding date (if you have one)</label><input type="date" id="f-date" name="date"></div>
-            <label class="field"><span>Location / venue</span><input type="text" name="location" maxlength="120"></label>
+            <label class="field"><span>Location / venue</span><input type="text" name="location" autocapitalize="words" maxlength="120"></label>
             <div class="field field--full"><label for="f-guests">Estimated guests</label>
               <select id="f-guests" name="guests">
                 <option value="">Select an option</option>
@@ -310,7 +308,7 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="section footer" id="footer" data-tone="dark">
-    <div class="footer__bg ph" style="--img:url(images/footer.jpg)" aria-hidden="true"></div>
+    <div class="footer__bg ph img-footer" aria-hidden="true"></div>
     <div class="footer__veil" aria-hidden="true"></div>
 
     <div class="footer__cta">
