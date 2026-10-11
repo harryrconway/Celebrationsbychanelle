@@ -84,10 +84,10 @@ To add a photo:
    - With Pillow: open, `ImageOps.exif_transpose`, `.convert('RGB')`, `.thumbnail(...)`, then save once as JPEG (`quality=80, optimize=True, progressive=True`) and once as WEBP (`quality=78, method=6`). Saving without passing `exif` drops the metadata.
 3. In `style.css` under "Photo for each slot", move the slot's line out of the commented "waiting" list and add a matching `image-set(...)` line inside the `@supports` block, copying the existing `about-blue` lines.
 4. Some slots are `hidden` in `index.html` until they have a photo: the How I Work banner (`.process__banner`, which needs a **landscape** photo) and the small framed About photo (`.about__photo--small`). Remove `hidden` when you add their photo.
-5. Set the focal point with `--img-pos` (for example `.img-chanelle-jed { --img-pos: center 28%; }`), then check the crop at 390px and 1440px, including the menu panel if that slot appears there.
+5. Set the focal point with `--img-pos` (for example `.img-chanelle-jed { --img-pos: center 28%; }`), then check the crop at 390px and 1440px. (The menu panel always shows the one `menu` photo; it doesn't change per link or on hover, by the owners' choice.)
 6. Write a descriptive `aria-label` for the slot.
 
-Photos lazy-load: a section's photo only downloads once the section is close to the screen (`.is-near`), and menu photos only once the visitor reaches for the menu (`.is-primed`). Keep using these classes rather than adding `<img>` tags that load immediately.
+Photos lazy-load: a section's photo only downloads once the section is close to the screen (`.is-near`), and the menu photo only once the visitor reaches for the menu (`.is-primed`). Keep using these classes rather than adding `<img>` tags that load immediately.
 
 ## Performance
 

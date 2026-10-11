@@ -314,24 +314,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   letter-spacing: .14em; color: var(--sage);
   transform: translateY(-1.1em);
 }
+/* Every label is solid sand; hover only lightens it and shows the italic line */
 .menu__label {
-  position: relative;
-  font-family: var(--f-serif); font-weight: 500;
+  font-weight: 500;
   font-size: clamp(2.1rem, min(7.4vh, 5.4vw), 5.6rem);
   line-height: 1.05;
   letter-spacing: .01em;
   text-transform: uppercase;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(217, 201, 183, .75);
-  white-space: nowrap;
-}
-.menu__label::after {
-  content: attr(data-text);
-  position: absolute; inset: 0;
   color: var(--sand);
-  -webkit-text-stroke: 0;
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path .7s var(--ease);
+  white-space: nowrap;
+  transition: color .4s;
 }
 .menu__script {
   font-size: clamp(1.1rem, 1.8vw, 1.6rem); font-style: italic;
@@ -339,9 +331,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   opacity: 0; transform: translateX(-12px);
   transition: opacity .5s var(--ease), transform .6s var(--ease);
 }
-.menu__list a:hover .menu__label::after,
-.menu__list a:focus-visible .menu__label::after,
-.menu__list a.is-current .menu__label::after { clip-path: inset(0 0 0 0); }
+.menu__list a:hover .menu__label,
+.menu__list a:focus-visible .menu__label { color: var(--cream); }
 .menu__list a:hover .menu__script,
 .menu__list a:focus-visible .menu__script { opacity: 1; transform: none; }
 .menu__list a.is-current .menu__num { color: var(--sand); }
@@ -360,17 +351,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-radius: 999px 999px 0 0;
   overflow: hidden;
 }
+/* One fixed menu photo (ceremony details); it doesn't change on hover */
 .menu__img {
   position: absolute; inset: 0;
-  opacity: 0; transform: scale(1.06);
-  transition: opacity .8s var(--ease), transform 1.4s var(--ease);
-}
-.menu__img.is-active { opacity: 1; transform: none; }
-/* Menu photo (ceremony details): shown for links whose section photo isn't added yet */
-.menu__img {
-  background-image: var(--img, none), var(--menu-photo, none), var(--ph-art), var(--ph-glow);
-  background-size: cover, cover, var(--art-size, auto 72%), cover, cover, cover;
-  background-position: var(--img-pos, center), center 42%, var(--art-pos, right -8% bottom -4%), center, center, center;
+  background-image: var(--menu-photo, none), var(--ph-art), var(--ph-glow);
+  background-size: cover, var(--art-size, auto 72%), cover, cover, cover;
+  background-position: center 42%, var(--art-pos, right -8% bottom -4%), center, center, center;
 }
 :is(.is-primed, html:not(.js)) .menu__img { --menu-photo: url("images/menu.jpg"); }
 @supports (background-image: image-set(url("a.webp") type("image/webp"))) {

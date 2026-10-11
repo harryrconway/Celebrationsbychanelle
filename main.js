@@ -133,7 +133,6 @@
   const toggle = $('.menu-toggle');
   const toggleLabel = $('.menu-toggle__label');
   const menuLinks = $$('.menu__list a');
-  const menuImages = $$('.menu__img');
   const menuFocusables = [toggle, ...$$('a[href], button', menu)];
   let lastFocus = null;
 
@@ -150,10 +149,6 @@
     menu.style.setProperty('--cy', `${r.top + r.height / 2}px`);
   }
 
-  function showMenuImage(index) {
-    menuImages.forEach((img) => img.classList.toggle('is-active', img.dataset.index === String(index)));
-  }
-
   function openMenu() {
     lastFocus = document.activeElement;
     primeMenu();
@@ -164,7 +159,6 @@
     toggleLabel.textContent = toggleLabel.dataset.close;
     root.classList.add('menu-open');
     const current = $('.menu__list a.is-current') || menuLinks[0];
-    showMenuImage(current.dataset.media);
     setTimeout(() => current.focus({ preventScroll: true }), reduceMotion ? 0 : 450);
   }
 
@@ -178,12 +172,6 @@
   }
 
   toggle.addEventListener('click', () => (isMenuOpen() ? closeMenu() : openMenu()));
-
-  menuLinks.forEach((link) => {
-    const show = () => showMenuImage(link.dataset.media);
-    link.addEventListener('mouseenter', show);
-    link.addEventListener('focus', show);
-  });
 
   document.addEventListener('keydown', (e) => {
     if (!isMenuOpen()) return;
