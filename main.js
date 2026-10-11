@@ -367,8 +367,8 @@
     table.append(thead, tbody);
 
     const foot = el('div', { class: 'datepicker__foot' });
-    const clearBtn = el('button', { type: 'button', class: 'text-link' }, 'Clear');
-    const doneBtn = el('button', { type: 'button', class: 'text-link' }, 'Close');
+    const clearBtn = el('button', { type: 'button', class: 'btn btn--dark' }, 'Clear');
+    const doneBtn = el('button', { type: 'button', class: 'btn btn--dark' }, 'Close');
     foot.append(clearBtn, doneBtn);
     pop.append(head, table, foot);
 

@@ -45,12 +45,13 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 **Feel:** elegant, romantic, refined, timeless. Premium and editorial, never a generic service business or stock-photo look. Generous whitespace, text layered over photography, restrained motion.
 
 - **Colours:** always use the tokens in `:root`, never new hex values: `--green` `#1F3D2E`, `--green-deep`, `--sage` `#8A9A86`, `--sand` `#D9C9B7`, `--brown` `#6B4F3B`, `--cream` `#F8F6F1`, `--linen` `#F1EBE2`, `--paper`, `--ink`, `--muted`, `--error`. Signature pairing: **sand text on dark green**. Light sections use cream or linen. Neighbouring light sections must differ in tone so they don't merge.
-- **Type:**
-  - `--f-script` (Great Vibes): the "Celebrations" wordmark and short romantic accents only ("Jed & I", "Your story. My honour."). Never for body text, and at most one or two script moments per screen.
-  - `--f-serif` (Cormorant Garamond): headings and body.
-  - `--f-sans` (Montserrat): small UPPERCASE letter-spaced labels and buttons (`.eyebrow`, `.btn`).
-  - A weight or style not already in `fonts.css` needs its own font file added.
-- **Reusable classes:** `.eyebrow` (`--dark` variant), `.display` (`--green`), `.script`, `.signature`, `.btn` with `--brown`/`--ghost`/`--green`, `.text-link`, `.socials`, `.field`.
+- **Type:** one typeface everywhere, by the owners' choice.
+  - `--f-script` (Great Vibes): **only** the "Celebrations" wordmark (loader, header, hero, footer badge and mark, checklist header). Nothing else.
+  - `--f-serif` (Cormorant Garamond): everything else, inherited from `body`: headings, body, small UPPERCASE letter-spaced labels (`.eyebrow`, weight 600) and buttons. Romantic accents that used to be script ("Chanelle", "Jed & I", "Your story. My honour.", signatures, "Love · Legacy · You") are Cormorant *italic*.
+  - Numbers use lining figures (set on `body`) so "01" doesn't read as "o1".
+  - Available files: Cormorant 300–600 upright and 300–400 italic, Great Vibes 400. A weight or style not already in `fonts.css` needs its own font file added.
+- **Buttons:** every button is the same outlined pill as the header's "Book me": `.btn` (sand, for dark backgrounds) or `.btn btn--dark` (green, for light backgrounds). No icons inside buttons and no other button styles. Cards (`.tile`, `.downloads a`) and round icon buttons (menu, close, socials, calendar arrows) are not buttons in this sense.
+- **Reusable classes:** `.eyebrow` (`--dark` variant), `.display` (`--green`), `.script` (wordmark only), `.signature`, `.btn` (`--dark` variant), `.socials`, `.field`.
 - **Icons:** inline SVG sprite at the top of `index.html`, used as `<svg class="icon"><use href="#i-name"/></svg>`. New icons follow the same style: 24×24 viewBox, outline strokes (inherited 1.3 stroke, round caps and joins), no fills except tiny dots. Social logos are the only filled icons.
 - **Layout:** every top-level section is `.section` (minimum 100% of the viewport height and full width). On desktop (1440×900) each section should fit one screen. On mobile, content may grow taller but must not overflow sideways. Clear the fixed header with `var(--header-h)` padding.
 - **Motion:** add `data-reveal` to elements that should fade up when scrolled into view (stagger is automatic). Photos fade in with their section. Respect `prefers-reduced-motion` (already handled globally). No bouncy or flashy effects.
@@ -72,7 +73,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 
 Slot names are listed at the top of `style.css`. In use: `about-blue`, `chanelle-jed`, `menu`. Waiting for files: `about-brown`, `resources`, `process`, `contact`, `footer`.
 
-The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it. It is dressed with a soft glow, two sand sprigs in the lower corners (smaller on phones, hidden on short phones) and an animated scroll line, so keep those clear of the text if the copy grows.
+The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it. It is dressed only with a soft glow and an animated scroll line at the bottom (no frame, no sprigs: the owners removed those).
 
 To add a photo:
 1. **Never commit camera originals.** `images/DSC*` is git-ignored on purpose (15+ MB each).

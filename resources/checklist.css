@@ -1,18 +1,19 @@
 /* Planning checklist page */
 :root { --green: #1F3D2E; --sand: #D9C9B7; --brown: #6B4F3B; --cream: #F8F6F1; --muted: #5D6A60; --line: rgba(31, 61, 46, .15); }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.12rem; line-height: 1.5; color: #26332B; background: var(--cream); }
+body { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.12rem; line-height: 1.5; font-variant-numeric: lining-nums; color: #26332B; background: var(--cream); }
 header { background: var(--green); color: var(--sand); text-align: center; padding: 3rem 1.25rem 2.5rem; }
 .script { font-family: 'Great Vibes', cursive; font-weight: 400; }
 header .script { font-size: clamp(3rem, 9vw, 4.5rem); line-height: 1; margin: 0; }
-.sub { font-family: 'Montserrat', sans-serif; font-size: .6rem; letter-spacing: .5em; text-transform: uppercase; margin: .3rem 0 1.6rem; }
+.sub { font-size: .72rem; font-weight: 600; letter-spacing: .45em; text-transform: uppercase; margin: .3rem 0 1.6rem; }
 h1 { font-weight: 400; font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0; color: var(--cream); }
 main { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
 .actions { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-.actions a, .actions button { font-family: 'Montserrat', sans-serif; font-size: .65rem; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; padding: .9rem 1.5rem; border: 1px solid var(--green); background: none; color: var(--green); text-decoration: none; cursor: pointer; }
-.actions button { background: var(--green); color: var(--cream); }
+/* Same outlined pill as the site's buttons */
+.actions a, .actions button { font: 600 .8rem/1.2 'Cormorant Garamond', Georgia, serif; letter-spacing: .26em; text-transform: uppercase; padding: .75rem 1.3rem .75rem calc(1.3rem + .26em); border: 1px solid rgba(31, 61, 46, .45); border-radius: 99px; background: none; color: var(--green); text-decoration: none; cursor: pointer; transition: background-color .4s, color .4s, border-color .4s; }
+.actions a:hover, .actions button:hover { background: var(--green); color: var(--cream); border-color: var(--green); }
 section { break-inside: avoid; margin-bottom: 2rem; }
-h2 { font-family: 'Montserrat', sans-serif; font-size: .7rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--brown); border-bottom: 1px solid var(--line); padding-bottom: .6rem; margin: 0 0 .8rem; }
+h2 { font-size: .85rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--brown); border-bottom: 1px solid var(--line); padding-bottom: .6rem; margin: 0 0 .8rem; }
 ul { list-style: none; padding: 0; margin: 0; }
 li label { display: flex; gap: .9rem; align-items: flex-start; padding: .45rem 0; cursor: pointer; }
 input[type="checkbox"] { appearance: none; -webkit-appearance: none; flex-shrink: 0; width: 1.15rem; height: 1.15rem; margin-top: .25rem; border: 1px solid var(--green); border-radius: 3px; display: grid; place-items: center; cursor: pointer; }
@@ -20,7 +21,7 @@ input[type="checkbox"]:checked { background: var(--green); }
 input[type="checkbox"]:checked::after { content: ''; width: .35rem; height: .6rem; border: solid var(--sand); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
 input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--sand); }
 footer { text-align: center; color: var(--muted); padding-bottom: 3rem; }
-footer .script { font-size: 2rem; color: var(--green); display: block; }
+footer .tag { font-size: 1.4rem; font-style: italic; color: var(--green); display: block; }
 @media print {
   body { background: #fff; font-size: 11pt; }
   header { padding: 1.5rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
