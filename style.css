@@ -442,21 +442,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     radial-gradient(70% 80% at 100% 0%, rgba(107, 79, 59, .32), transparent 60%),
     radial-gradient(70% 80% at 0% 100%, rgba(42, 77, 59, .7), transparent 60%);
 }
-.hero__scroll {
-  position: absolute; left: 0; right: 0; bottom: clamp(2.25rem, 7vh, 4rem);
-  display: flex; justify-content: center;
-}
-.hero__scroll::after {
-  content: ''; width: 1px; height: 2.6rem;
-  background: linear-gradient(var(--sand), transparent);
-  transform-origin: top;
-  animation: hero-scroll 2.6s var(--ease-in-out) infinite;
-}
-@keyframes hero-scroll {
-  0% { transform: scaleY(0); opacity: 1; }
-  60% { transform: scaleY(1); opacity: 1; }
-  100% { transform: scaleY(1); opacity: 0; }
-}
 .hero__title { margin-bottom: 1.6rem; }
 .hero__title .script {
   display: block;
@@ -572,9 +557,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   display: flex; flex-direction: column; justify-content: center;
   padding: calc(var(--header-h) + 2rem) var(--gutter) 3rem clamp(2rem, 5vw, 5rem);
 }
+/* Tiles and download links are pills, like the buttons */
 .tiles {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem;
   margin-bottom: clamp(2rem, 5vh, 3.5rem);
 }
 .tile {
@@ -582,14 +567,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem;
   min-height: clamp(9rem, 19vh, 12.5rem);
   padding: 1.4rem 1rem;
-  background: none; border: 0;
-  border-bottom: 1px solid var(--line);
-  border-right: 1px solid var(--line);
+  background: none;
+  border: 1px solid var(--line); border-radius: 99px;
   text-align: center; color: var(--green);
   overflow: hidden; isolation: isolate;
   transition: color .5s var(--ease);
 }
-.tile:nth-child(3n) { border-right: 0; }
 .tile::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
   background: var(--green);
@@ -614,7 +597,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .downloads ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .downloads a {
   display: flex; align-items: center; gap: .9rem; height: 100%;
-  padding: 1rem; border: 1px solid var(--line); background: var(--paper);
+  /* The icon circle sits in the pill's rounded end */
+  padding: .9rem 1.6rem .9rem .9rem;
+  border: 1px solid var(--line); border-radius: 99px; background: var(--paper);
   transition: border-color .4s, transform .5s var(--ease), box-shadow .5s;
 }
 .downloads a:hover { border-color: var(--sand); transform: translateY(-3px); box-shadow: 0 18px 30px -22px rgba(31, 61, 46, .5); }
@@ -643,7 +628,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .process__intro > p { color: var(--muted); max-width: 26rem; }
 .process__sub { font-size: .8rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--brown) !important; margin-top: -.4rem; }
 .process__script { font-size: clamp(1.6rem, 2.4vw, 2.1rem); font-style: italic; line-height: 1.15; color: var(--green) !important; margin: .6rem 0 1.2rem; }
-.package-card { border: 1px solid var(--line); background: var(--paper); padding: 1.4rem 1.5rem; max-width: 26rem; }
+/* Rounded to match the pills; a full pill would clip the text */
+.package-card { border: 1px solid var(--line); border-radius: 2rem; background: var(--paper); padding: 1.6rem 1.9rem; max-width: 26rem; }
 .package-card .eyebrow { margin-bottom: .6rem; }
 .package-card p { color: var(--muted); font-size: 1rem; }
 .timeline {
@@ -1022,7 +1008,7 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
    ========================================================= */
 @media (max-width: 1200px) {
   .downloads ul { grid-template-columns: 1fr; }
-  .downloads a { padding: .8rem 1rem; }
+  .downloads a { padding: .8rem 1.4rem .8rem .8rem; }
 }
 
 @media (max-width: 1024px) {
@@ -1075,8 +1061,6 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
   .values .icon { width: 1.6rem; height: 1.6rem; margin-bottom: .5rem; }
 
   .tiles { grid-template-columns: 1fr 1fr; }
-  .tile:nth-child(3n) { border-right: 1px solid var(--line); }
-  .tile:nth-child(2n) { border-right: 0; }
   .tile { min-height: 8.5rem; }
   .tile em { display: none; }
 
@@ -1098,7 +1082,6 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
     transition-delay: 0s !important;
   }
   .js [data-reveal], .js .section .ph { opacity: 1; transform: none; }
-  .hero__scroll::after { animation: none; }
 }
 
 [tabindex="-1"]:focus { outline: none; }

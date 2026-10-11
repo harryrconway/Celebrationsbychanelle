@@ -51,6 +51,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
   - Numbers use lining figures (set on `body`) so "01" doesn't read as "o1".
   - Available files: Cormorant 300–600 upright and 300–400 italic, Great Vibes 400. A weight or style not already in `fonts.css` needs its own font file added.
 - **Buttons:** every button is the same outlined pill as the header's "Book me": `.btn` (sand, for dark backgrounds) or `.btn btn--dark` (green, for light backgrounds). No icons inside buttons and no other button styles. Cards (`.tile`, `.downloads a`) and round icon buttons (menu, close, socials, calendar arrows) are not buttons in this sense.
+- **Shapes follow the pill buttons:** clickable cards are pills too (`.tile`, `.downloads a`: `border-radius: 99px`, separate outlines with a gap rather than shared grid lines). Text cards where a full pill would clip the words (`.package-card`) use `border-radius: 2rem`. Avoid square-cornered boxes.
 - **Reusable classes:** `.eyebrow` (`--dark` variant), `.display` (`--green`), `.script` (wordmark only), `.signature`, `.btn` (`--dark` variant), `.socials`, `.field`.
 - **Icons:** inline SVG sprite at the top of `index.html`, used as `<svg class="icon"><use href="#i-name"/></svg>`. New icons follow the same style: 24×24 viewBox, outline strokes (inherited 1.3 stroke, round caps and joins), no fills except tiny dots. Social logos are the only filled icons.
 - **Layout:** every top-level section is `.section` (minimum 100% of the viewport height and full width). On desktop (1440×900) each section should fit one screen. On mobile, content may grow taller but must not overflow sideways. Clear the fixed header with `var(--header-h)` padding.
@@ -73,7 +74,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 
 Slot names are listed at the top of `style.css`. In use: `about-blue`, `chanelle-jed`, `menu`. Waiting for files: `about-brown`, `resources`, `process`, `contact`, `footer`.
 
-The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it. It is dressed only with a soft glow and an animated scroll line at the bottom (no frame, no sprigs: the owners removed those).
+The Home hero has no photo: the title block fills the whole first screen (100% of the viewport height and width), centred on dark green, with the values strip below it. It is dressed only with a soft glow (no frame, sprigs or scroll cue: the owners removed those).
 
 To add a photo:
 1. **Never commit camera originals.** `images/DSC*` is git-ignored on purpose (15+ MB each).
