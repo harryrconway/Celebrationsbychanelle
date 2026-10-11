@@ -632,6 +632,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .timeline li.is-visible::after { width: 100%; }
 .timeline__num {
   position: absolute; top: -1.45rem; left: 0;
+  z-index: 1; /* above the drawn line (li::after), so it never crosses the number */
   display: grid; place-items: center;
   width: 2.9rem; height: 2.9rem; border-radius: 50%;
   background: var(--green); color: var(--sand);
