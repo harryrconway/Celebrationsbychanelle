@@ -619,11 +619,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .timeline li { position: relative; border-top: 1px solid var(--line); padding-top: 2.2rem; }
 .timeline li::after {
-  content: ''; position: absolute; left: 0; top: -1px; height: 1px; width: 0;
+  content: ''; position: absolute; left: 0; top: -1px; height: 1px; width: 100%;
   background: var(--green);
-  transition: width 1.4s var(--ease) calc(var(--i, 0) * 110ms + .3s);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 1.4s var(--ease) calc(var(--i, 0) * 110ms + .3s);
 }
-.timeline li.is-visible::after { width: 100%; }
+.timeline li.is-visible::after { transform: none; }
 .timeline__num {
   position: absolute; top: -1.45rem; left: 0;
   z-index: 1; /* above the drawn line (li::after), so it never crosses the number */
@@ -724,8 +725,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   caret-color: var(--green);
   transition: background-color 9999s;
 }
-/* Native fallbacks (before JS enhances them) */
-.field select {
+/* Native fallbacks for visitors without JavaScript (with JS the select is replaced,
+   so its arrow image is never downloaded) */
+html:not(.js) .field select {
   background-image: url("images/ui/chevron-down.svg");
   background-repeat: no-repeat; background-position: right center; background-size: 1rem;
   padding-right: 1.5rem;
