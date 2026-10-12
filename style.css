@@ -309,11 +309,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   transform: none;
   transition: transform 1s var(--ease) calc(.35s + var(--i) * .07s);
 }
-.menu__num {
-  font-size: .9rem; font-weight: 600;
-  letter-spacing: .14em; color: var(--sage);
-  transform: translateY(-1.1em);
-}
 /* Every label is solid sand; hover only lightens it and shows the italic line */
 .menu__label {
   font-weight: 500;
@@ -335,7 +330,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .menu__list a:focus-visible .menu__label { color: var(--cream); }
 .menu__list a:hover .menu__script,
 .menu__list a:focus-visible .menu__script { opacity: 1; transform: none; }
-.menu__list a.is-current .menu__num { color: var(--sand); }
 
 .menu__aside {
   display: flex; flex-direction: column; justify-content: center; gap: 1.6rem;

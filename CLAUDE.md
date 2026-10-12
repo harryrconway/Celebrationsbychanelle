@@ -67,6 +67,8 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 
 - Spelling is **Chanelle** (not "Chanel"). Her partner is **Jed**. Based on the Gold Coast; travels to surrounding areas and beyond.
 - Voice: warm, personal, first person ("I'll…"), relaxed but polished. **Australian English** (personalised, colour, organise).
+- **No hyphens or dashes in visible text** (no -, – or —). Reword instead: use a comma, colon or full stop in place of a dash, "24 to 48 hours" for ranges, and rephrase or open up compounds ("practice run", not "run-through"). This covers page copy, `aria-label`s, meta descriptions and messages shown by `main.js`. Code (class names, attributes, URLs) is unaffected.
+- The menu links have no numbers (01, 02…); keep it that way.
 - Legal content in the "Getting Married" drawers is general guidance on Australian marriage law (NOIM at least 1 month and up to 18 months ahead, 2 witnesses aged 18+, registration with QLD BDM within 14 days, and so on). Keep it accurate, link to official sources (ag.gov.au, qld.gov.au), and don't present it as legal advice.
 - **Placeholders still to confirm with Chanelle:** the email address, all social links (in `CONFIG` in `main.js`), ceremony packages and pricing (currently "coming soon"), and a phone number (none shown yet).
 
@@ -103,5 +105,5 @@ Photos lazy-load: a section's photo only downloads once the section is close to 
 2. The page loads locally with **no console errors**. CSP violations show up in the console, so treat any as a bug.
 3. Look at the changed area at 390px and 1440px.
 4. If the form changed: test typing, pasting, validation messages and a submission.
-5. No emoji, no inline styles or scripts, no external URLs added.
+5. No emoji, no hyphens or dashes in visible text, no inline styles or scripts, no external URLs added.
 6. Then commit, push, and confirm the Pages build and the live page.

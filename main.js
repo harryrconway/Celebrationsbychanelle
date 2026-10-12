@@ -659,13 +659,13 @@
         const at = v.indexOf('@');
         return at < 0 ? v : v.slice(0, at + 1) + v.slice(at + 1).replace(/@/g, '');
       },
-      hint: 'Letters, numbers and . _ % + - @ only.',
+      hint: 'Letters, numbers and . _ % + @ only.',
       check: (v) => EMAIL_RE.test(v) || 'Please enter a valid email address.',
     },
     phone: {
       max: 20, single: true, normalize: 'NFKC', strip: /[^0-9+() -]/g,
       fix: (v) => v.replace(/(?!^)\+/g, ''),
-      hint: 'Numbers, spaces and + ( ) - only.',
+      hint: 'Numbers, spaces, brackets and + only.',
       check: (v) => {
         if (!v) return true;
         const digits = v.replace(/\D/g, '').length;
@@ -674,7 +674,7 @@
     },
     location: {
       max: 120, single: true, strip: /[^\p{L}\p{M}\p{N} ,.'’&/#()-]/gu,
-      hint: "Letters, numbers and , . ' - & / # ( ) only.",
+      hint: "Letters, numbers and , . ' & / # ( ) only.",
       check: (v) => !v || v.replace(/[^\p{L}\p{N}]/gu, '').length >= 2 || 'Please check the location.',
     },
     message: {
@@ -835,12 +835,12 @@
 
       // Bot traps: hidden honeypot field filled in, or form completed inhumanly fast
       if (raw.get('_gotcha') || Date.now() - loadedAt < MIN_FILL_MS) {
-        showThanks("I'll be in touch within 24–48 hours.");
+        showThanks("I'll be in touch within 24 to 48 hours.");
         form.reset();
         return;
       }
       if (isRateLimited()) {
-        status.textContent = 'Thanks — your enquiry is on its way. Please wait a little before sending another.';
+        status.textContent = 'Thanks, your enquiry is on its way. Please wait a little before sending another.';
         return;
       }
 
@@ -875,7 +875,7 @@
             redirect: 'error',
           });
           if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-          showThanks("I'll be in touch within 24–48 hours.");
+          showThanks("I'll be in touch within 24 to 48 hours.");
         } else {
           const lines = Object.entries(LABELS)
             .filter(([key]) => fields[key])
@@ -887,7 +887,7 @@
         recordSend();
         form.reset();
       } catch {
-        status.textContent = `Something went wrong — please email ${CONFIG.email} directly.`;
+        status.textContent = `Something went wrong. Please email ${CONFIG.email} directly.`;
       } finally {
         submit.disabled = false;
       }
