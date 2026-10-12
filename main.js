@@ -115,8 +115,9 @@
   if (reduceMotion) {
     finishLoading();
   } else {
-    window.addEventListener('load', () => setTimeout(finishLoading, 700));
-    setTimeout(finishLoading, 2600); // never hold the page hostage to slow assets
+    // Hold 1.7s after load so "Celebrations" finishes writing itself before the intro lifts
+    window.addEventListener('load', () => setTimeout(finishLoading, 1700));
+    setTimeout(finishLoading, 3600); // never hold the page hostage to slow assets
   }
 
   /* ---------- Header ---------- */

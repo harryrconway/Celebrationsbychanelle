@@ -56,6 +56,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 - **Icons:** inline SVG sprite at the top of `index.html`, used as `<svg class="icon"><use href="#i-name"/></svg>`. New icons follow the same style: 24×24 viewBox, outline strokes (inherited 1.3 stroke, round caps and joins), no fills except tiny dots. Social logos are the only filled icons.
 - **Layout:** every top-level section is `.section` (minimum 100% of the viewport height and full width). On desktop (1440×900) each section should fit one screen. On mobile, content may grow taller but must not overflow sideways. Clear the fixed header with `var(--header-h)` padding.
 - **Motion:** add `data-reveal` to elements that should fade up when scrolled into view (stagger is automatic). Photos fade in with their section. Respect `prefers-reduced-motion` (already handled globally). No bouncy or flashy effects.
+- **Intro loader:** it holds for 1.7s after the page's load event (cap 3.6s on slow connections; skipped for reduced motion) so the full "Celebrations by Chanelle" lockup shows before it lifts. This is the owners' deliberate choice, even though it delays the first screen; don't shorten it for performance without asking. Timings are in `main.js` under "Intro loader".
 - **Responsive:** breakpoints at 1200, 1024, 860 and 600px (the "RESPONSIVE" block at the end of `style.css`). Check every change at **390px** (phone), **820px** (tablet) and **1440px** (desktop).
 - **Accessibility:**
   - Real labels on form fields and `aria-label` on icon-only buttons.
