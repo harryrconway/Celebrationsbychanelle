@@ -305,6 +305,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .menu__list li:nth-child(4) { --i: 3; }
 .menu__list li:nth-child(5) { --i: 4; }
 .menu__list li:nth-child(6) { --i: 5; }
+.menu__list li:nth-child(7) { --i: 6; }
 .menu__list a {
   display: flex; align-items: baseline; gap: clamp(1rem, 2.5vw, 2.4rem);
   padding: clamp(.35rem, 1.2vh, .9rem) 0;
@@ -523,7 +524,34 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 /* =========================================================
-   04 RESOURCES
+   04 IN THE MEDIA
+   ========================================================= */
+.press {
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; color: var(--cream);
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 4rem;
+  background:
+    radial-gradient(50% 45% at 50% 48%, rgba(217, 201, 183, .09), transparent 70%),
+    radial-gradient(60% 70% at 0% 0%, rgba(107, 79, 59, .3), transparent 60%),
+    radial-gradient(60% 70% at 100% 100%, rgba(42, 77, 59, .6), transparent 60%),
+    var(--green-deep);
+}
+.press__inner { display: flex; flex-direction: column; align-items: center; max-width: 62rem; }
+.press__headline {
+  font-size: clamp(2.2rem, 4.8vw, 4.6rem); font-style: italic; line-height: 1.12;
+  color: var(--sand); text-wrap: balance;
+  margin: 0 0 1.6rem;
+}
+.press__source {
+  font-size: .78rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 2rem;
+}
+.press__source span { margin: 0 .5em; }
+.press__source time { white-space: nowrap; }
+.press__intro { max-width: 36rem; color: rgba(248, 246, 241, .88); margin-bottom: 2.4rem; }
+
+/* =========================================================
+   05 RESOURCES
    ========================================================= */
 .resources { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); background: var(--cream); }
 .resources__intro { position: relative; display: flex; align-items: flex-end; color: var(--cream); min-height: 60vh; }
@@ -597,7 +625,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .downloads small { display: block; margin-top: .3rem; font-size: .85rem; line-height: 1.4; letter-spacing: .04em; color: var(--muted); }
 
 /* =========================================================
-   05 PROCESS
+   06 PROCESS
    ========================================================= */
 .process { display: flex; flex-direction: column; background: var(--linen); }
 .process__banner { height: 26vh; min-height: 12rem; flex-shrink: 0; --img-pos: center 60%; }
@@ -646,7 +674,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .timeline p { margin: 0; font-size: 1.02rem; line-height: 1.5; color: var(--muted); }
 
 /* =========================================================
-   06 CONTACT
+   07 CONTACT
    ========================================================= */
 .contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); background: var(--cream); }
 .contact__aside { position: relative; display: flex; align-items: center; color: var(--cream); }

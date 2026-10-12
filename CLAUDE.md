@@ -16,7 +16,7 @@ Two people edit this repo: Harry (owner) and Jydon (collaborator). Keep that in 
 
 | Path | What it holds |
 |---|---|
-| `index.html` | The whole one-page site: SVG icon sprite, loader, header, fullscreen menu, six sections, footer, resource drawers (`<dialog>`). The Content Security Policy is in `<head>`. |
+| `index.html` | The whole one-page site: SVG icon sprite, loader, header, fullscreen menu, seven sections, footer, resource drawers (`<dialog>`). The Content Security Policy is in `<head>`. |
 | `style.css` | Design tokens (`:root`), components, one block per section, responsive rules at the end. Photo slots are listed at the top of the file. |
 | `main.js` | All behaviour, in one IIFE. `CONFIG` at the top holds the email, social links and the optional form endpoint. |
 | `fonts.css`, `fonts/` | Self-hosted fonts (woff2, split by `unicode-range`). |
@@ -71,6 +71,7 @@ Both HTML pages ship a strict CSP (`default-src 'none'`, self-only sources, Trus
 - **No hyphens or dashes in visible text** (no -, – or —). Reword instead: use a comma, colon or full stop in place of a dash, "24 to 48 hours" for ranges, and rephrase or open up compounds ("practice run", not "run-through"). This covers page copy, `aria-label`s, meta descriptions and messages shown by `main.js`. Code (class names, attributes, URLs) is unaffected.
 - The menu links have no numbers (01, 02…); keep it that way.
 - Legal content in the "Getting Married" drawers is general guidance on Australian marriage law (NOIM at least 1 month and up to 18 months ahead, 2 witnesses aged 18+, registration with QLD BDM within 14 days, and so on). Keep it accurate, link to official sources (ag.gov.au, qld.gov.au), and don't present it as legal advice.
+- **In the Media** (`#press`, between Love Story and Getting Married): features Chanelle and Jed's ABC News "Love Story" interview (11 October 2026), quoting the ABC headline and linking out to the article. A section has to be added in four places: the `<section>`, the menu list (plus an `nth-child` stagger rule in `style.css`), the side dots and the footer "Explore" links. For more press later, add items inside `.press__inner` rather than new sections. Don't copy text or photos from the ABC page: quote the headline only, link to the article, and use photos Chanelle supplies (the ABC's photos were "Supplied" by her, so ask her for the originals). No outlet logos without permission.
 - **Placeholders still to confirm with Chanelle:** the email address, all social links (in `CONFIG` in `main.js`), ceremony packages and pricing (currently "coming soon"), and a phone number (none shown yet).
 
 ## Photos
