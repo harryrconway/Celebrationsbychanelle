@@ -83,13 +83,14 @@ To add a photo:
 2. Make web copies from the original, stripped of EXIF/GPS metadata:
    - Portrait: max 1600×2400. Landscape banners: max 2400 wide.
    - `images/<slot>.jpg` at about quality 80, plus `images/<slot>.webp` at about quality 78.
+   - **Portrait section photos also get a smaller copy for phones and standard-resolution screens:** `images/<slot>-1200.jpg` and `images/<slot>-1200.webp`, made the same way with `.thumbnail((1200, 1800))`. They are about 40% smaller and look identical at those sizes.
    - With Pillow: open, `ImageOps.exif_transpose`, `.convert('RGB')`, `.thumbnail(...)`, then save once as JPEG (`quality=80, optimize=True, progressive=True`) and once as WEBP (`quality=78, method=6`). Saving without passing `exif` drops the metadata.
-3. In `style.css` under "Photo for each slot", move the slot's line out of the commented "waiting" list and add a matching `image-set(...)` line inside the `@supports` block, copying the existing `about-blue` lines.
+3. In `style.css` under "Photo for each slot", move the slot's line out of the commented "waiting" list and add a matching `image-set(...)` line inside the `@supports` block, copying the existing `about-blue` lines. For the `-1200` copies, add the same pair of lines inside the `@media (max-width: 600px), (max-resolution: 1.5dppx)` block. Only the winning `--img` value downloads, so each visitor fetches one file per slot.
 4. Some slots are `hidden` in `index.html` until they have a photo: the How I Work banner (`.process__banner`, which needs a **landscape** photo) and the small framed About photo (`.about__photo--small`). Remove `hidden` when you add their photo.
 5. Set the focal point with `--img-pos` (for example `.img-chanelle-jed { --img-pos: center 28%; }`), then check the crop at 390px and 1440px. (The menu panel always shows the one `menu` photo; it doesn't change per link or on hover, by the owners' choice.)
 6. Write a descriptive `aria-label` for the slot.
 
-Photos lazy-load: a section's photo only downloads once the section is close to the screen (`.is-near`), and the menu photo only once the visitor reaches for the menu (`.is-primed`). Keep using these classes rather than adding `<img>` tags that load immediately.
+Photos lazy-load: a section's photo only downloads once the section is close to the screen (`.is-near`, which `main.js` only starts adding after the page's load event, so no photo can delay the first screen or the intro loader), and the menu photo only once the visitor reaches for the menu (`.is-primed`). Keep using these classes rather than adding `<img>` tags that load immediately.
 
 ## Performance
 

@@ -138,6 +138,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   :is(.is-near, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue.webp") type("image/webp"), url("images/about-blue.jpg") type("image/jpeg")); }
   :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed.webp") type("image/webp"), url("images/chanelle-jed.jpg") type("image/jpeg")); }
 }
+/* Phones and standard-resolution screens get a 1200px copy (about 40% smaller);
+   high-resolution laptops and tablets keep the 1600px one. Only the winning --img downloads. */
+@media (max-width: 600px), (max-resolution: 1.5dppx) {
+  :is(.is-near, html:not(.js)) .img-about-blue { --img: url("images/about-blue-1200.jpg"); }
+  :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: url("images/chanelle-jed-1200.jpg"); }
+  @supports (background-image: image-set(url("a.webp") type("image/webp"))) {
+    :is(.is-near, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue-1200.webp") type("image/webp"), url("images/about-blue-1200.jpg") type("image/jpeg")); }
+    :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed-1200.webp") type("image/webp"), url("images/chanelle-jed-1200.jpg") type("image/jpeg")); }
+  }
+}
 .img-chanelle-jed { --img-pos: center 28%; }
 /* Slots waiting for photos. Add the file to /images, then uncomment its line:
 :is(.is-near, html:not(.js)) .img-about-brown { --img: url("images/about-brown.jpg"); }
