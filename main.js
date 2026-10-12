@@ -44,8 +44,16 @@
   const hasObserver = 'IntersectionObserver' in window;
 
   /* ---------- Lazy photos ---------- */
-  // Section photos only download when their section is within ~3/4 of a screen of view
-  if (hasObserver) {
+  // Section photos only download when their section is within ~3/4 of a screen of view.
+  // Watching starts after the load event, so an off-screen photo never delays it (or the loader).
+  let photosStarted = false;
+  function startPhotos() {
+    if (photosStarted) return;
+    photosStarted = true;
+    if (!hasObserver) {
+      sections.forEach((s) => s.classList.add('is-near'));
+      return;
+    }
     const nearObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
@@ -54,9 +62,8 @@
       });
     }, { rootMargin: '75% 0px' });
     sections.forEach((s) => nearObserver.observe(s));
-  } else {
-    sections.forEach((s) => s.classList.add('is-near'));
   }
+  window.addEventListener('load', startPhotos, { once: true });
 
   /* ---------- Reveal on scroll ---------- */
   function startReveal() {
@@ -102,6 +109,7 @@
     if (loaded) return;
     loaded = true;
     root.classList.add('is-loaded');
+    startPhotos(); // in case load hasn't fired (slow assets, reduced motion)
     startReveal();
   }
   if (reduceMotion) {
