@@ -2,8 +2,8 @@
    Celebrations by Chanelle
    ---------------------------------------------------------
    PHOTO SLOTS: each photo is a .jpg (plus a smaller .webp) in /images.
-   In use:   about-blue (About), chanelle-jed (Love Story), menu (menu panel)
-   Waiting:  about-brown, resources, process, contact, footer.
+   In use:   about-blue (About), chanelle-jed (Love Story), resources (Getting Married), menu (menu panel)
+   Waiting:  about-brown, process, contact, footer.
              Add the file, then uncomment its line in "Photo for each slot".
    ========================================================= */
 
@@ -134,27 +134,31 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    WebP is used where supported, JPG otherwise. The menu photo is separate (.menu__img). */
 :is(.is-near, html:not(.js)) .img-about-blue { --img: url("images/about-blue.jpg"); }
 :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: url("images/chanelle-jed.jpg"); }
+:is(.is-near, html:not(.js)) .img-resources { --img: url("images/resources.jpg"); }
 @supports (background-image: image-set(url("a.webp") type("image/webp"))) {
   :is(.is-near, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue.webp") type("image/webp"), url("images/about-blue.jpg") type("image/jpeg")); }
   :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed.webp") type("image/webp"), url("images/chanelle-jed.jpg") type("image/jpeg")); }
+  :is(.is-near, html:not(.js)) .img-resources { --img: image-set(url("images/resources.webp") type("image/webp"), url("images/resources.jpg") type("image/jpeg")); }
 }
 /* Phones and standard-resolution screens get a 1200px copy (about 40% smaller);
    high-resolution laptops and tablets keep the 1600px one. Only the winning --img downloads. */
 @media (max-width: 600px), (max-resolution: 1.5dppx) {
   :is(.is-near, html:not(.js)) .img-about-blue { --img: url("images/about-blue-1200.jpg"); }
   :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: url("images/chanelle-jed-1200.jpg"); }
+  :is(.is-near, html:not(.js)) .img-resources { --img: url("images/resources-1200.jpg"); }
   @supports (background-image: image-set(url("a.webp") type("image/webp"))) {
     :is(.is-near, html:not(.js)) .img-about-blue { --img: image-set(url("images/about-blue-1200.webp") type("image/webp"), url("images/about-blue-1200.jpg") type("image/jpeg")); }
     :is(.is-near, html:not(.js)) .img-chanelle-jed { --img: image-set(url("images/chanelle-jed-1200.webp") type("image/webp"), url("images/chanelle-jed-1200.jpg") type("image/jpeg")); }
+    :is(.is-near, html:not(.js)) .img-resources { --img: image-set(url("images/resources-1200.webp") type("image/webp"), url("images/resources-1200.jpg") type("image/jpeg")); }
   }
 }
 .img-chanelle-jed { --img-pos: center 28%; }
+.img-resources { --img-pos: center 22%; }
 /* Slots waiting for photos. Add the file to /images, then uncomment its line:
 :is(.is-near, html:not(.js)) .img-about-brown { --img: url("images/about-brown.jpg"); }
 :is(.is-near, html:not(.js)) .img-contact { --img: url("images/contact.jpg"); }
 :is(.is-near, html:not(.js)) .img-footer { --img: url("images/footer.jpg"); }
 :is(.is-near, html:not(.js)) .img-process { --img: url("images/process.jpg"); }
-:is(.is-near, html:not(.js)) .img-resources { --img: url("images/resources.jpg"); }
 */
 
 /* ---------- Sections ---------- */
@@ -416,13 +420,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    01 HERO
    ========================================================= */
 .hero { display: flex; flex-direction: column; color: var(--cream); background: var(--green-deep); }
-/* The title fills the whole first screen, centred; the values strip follows below */
+/* Hero and values strip share exactly one screen: the title fills the space above the strip */
 .hero__content {
+  flex: 1;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   text-align: center;
   width: 100%;
-  min-height: 100vh; min-height: 100svh;
-  padding: calc(var(--header-h) + 1rem) var(--gutter);
+  padding: calc(var(--header-h) + 1rem) var(--gutter) clamp(1.5rem, 4vh, 3rem);
   background:
     radial-gradient(45% 40% at 50% 46%, rgba(217, 201, 183, .1), transparent 70%),
     radial-gradient(70% 80% at 100% 0%, rgba(107, 79, 59, .32), transparent 60%),
@@ -431,7 +435,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero__title { margin-bottom: 1.6rem; }
 .hero__title .script {
   display: block;
-  font-size: clamp(4.4rem, 11.5vw, 11rem);
+  font-size: clamp(4.4rem, min(11.5vw, 17vh), 11rem);
   line-height: .95;
   color: var(--sand);
   padding: 0 .1em;
@@ -500,7 +504,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* =========================================================
    03 LOVE STORY
    ========================================================= */
-.story { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); background: var(--cream); }
+.story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--cream); }
 .story__media {
   min-height: 55vh;
   --art-pos: left -10% bottom -6%;
@@ -553,7 +557,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* =========================================================
    05 RESOURCES
    ========================================================= */
-.resources { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); background: var(--cream); }
+.resources { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--cream); }
 .resources__intro { position: relative; display: flex; align-items: flex-end; color: var(--cream); min-height: 60vh; }
 .resources__bg {
   position: absolute; inset: 0;
@@ -572,7 +576,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* Tiles and download links are pills, like the buttons */
 .tiles {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem;
-  margin-bottom: clamp(2rem, 5vh, 3.5rem);
+  margin-bottom: clamp(1.5rem, 4vh, 3rem);
 }
 .tile {
   position: relative;
@@ -606,11 +610,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .tile:hover em, .tile:focus-visible em { opacity: 1; transform: none; }
 .downloads h3 { margin-bottom: 1rem; }
-.downloads ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+/* The hub is half the screen wide, so one pill per row */
+.downloads ul { display: grid; grid-template-columns: 1fr; gap: .6rem; }
 .downloads a {
   display: flex; align-items: center; gap: .9rem; height: 100%;
   /* The icon circle sits in the pill's rounded end */
-  padding: .9rem 1.6rem .9rem .9rem;
+  padding: .55rem 1.6rem .55rem .55rem;
   border: 1px solid var(--line); border-radius: 99px; background: var(--paper);
   transition: border-color .4s, transform .5s var(--ease), box-shadow .5s;
 }
@@ -631,7 +636,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .process__banner { height: 26vh; min-height: 12rem; flex-shrink: 0; --img-pos: center 60%; }
 .process__body {
   flex: 1;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 6rem); align-items: center;
   padding: clamp(2.5rem, 6vh, 4.5rem) var(--gutter);
 }
@@ -676,7 +681,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* =========================================================
    07 CONTACT
    ========================================================= */
-.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); background: var(--cream); }
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--cream); }
 .contact__aside { position: relative; display: flex; align-items: center; color: var(--cream); }
 .contact__bg {
   position: absolute; inset: 0;
@@ -1020,9 +1025,64 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
+/* Short laptop windows (browser bars take height): tighten vertical spacing so every
+   desktop section still fits exactly one screen. Taller windows and phones are unchanged. */
+@media (min-width: 1025px) and (max-height: 860px) {
+  .about__panel { padding-top: calc(var(--header-h) + 1.5rem); padding-bottom: 2rem; }
+  .about__title { font-size: clamp(3.4rem, 9vh, 5.5rem); margin-bottom: 1rem; }
+  .about__panel p { margin-bottom: .8em; }
+
+  .resources__hub { padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: 2rem; }
+  .tiles { gap: .6rem; margin-bottom: 1.4rem; }
+  .tile { min-height: clamp(7rem, 16vh, 12.5rem); padding: .9rem .8rem; gap: .5rem; }
+  .tile .icon { width: 1.7rem; height: 1.7rem; }
+  .downloads h3 { margin-bottom: .7rem; }
+  .downloads ul { gap: .45rem; }
+
+  .contact__aside-inner { padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: 2rem; }
+  .contact__details { margin: 1.4rem 0; gap: .8rem; }
+  .contact__form-wrap { padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: 2rem; }
+  .form__grid { gap: 1.3rem 2rem; }
+  .field textarea { min-height: 4.5rem; }
+  .form__privacy { margin-top: 1rem; }
+  .form__actions { margin-top: 1.2rem; }
+
+  .footer__cta { padding-block: .5rem 1.5rem; gap: 1.1rem; }
+  .footer__grid { padding-top: 1.5rem; }
+  .footer__mark { font-size: clamp(4.5rem, min(15vw, 22vh), 17rem); }
+}
+/* Very short windows (small laptops with browser bars showing) */
+@media (min-width: 1025px) and (max-height: 740px) {
+  .story__text { padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: 1.5rem; }
+  .story__title { font-size: clamp(3rem, 9vh, 5rem); margin-bottom: 1rem; }
+  .story__text p { margin-bottom: .8em; }
+  .about__panel p, .story__text p { font-size: 1.05rem; line-height: 1.55; }
+
+  .resources__hub { padding-top: calc(var(--header-h) + .75rem); padding-bottom: 1.25rem; }
+  .tile { min-height: 0; padding: .75rem .7rem; }
+  .tiles { margin-bottom: 1rem; }
+  .downloads a { padding-block: .4rem; }
+
+  .process__banner[hidden] + .process__body { padding-top: calc(var(--header-h) + 1rem); }
+  .process__body { padding-bottom: 1.25rem; }
+  .timeline { row-gap: 2.2rem; padding-top: 1.2rem; }
+  .timeline li { padding-top: 1.9rem; }
+
+  .contact__aside-inner { padding-top: calc(var(--header-h) + .75rem); padding-bottom: 1.25rem; }
+  .contact__aside-inner > p { margin-bottom: .8em; }
+  .contact__details { margin: 1rem 0; gap: .6rem; }
+  .contact__form-wrap { padding-top: calc(var(--header-h) + .75rem); padding-bottom: 1.25rem; }
+  .form__grid { gap: 1rem 2rem; }
+  .field textarea { min-height: 3.2rem; }
+
+  .footer__cta { padding-block: 0 1rem; gap: .9rem; }
+  .footer__script { font-size: clamp(2rem, 7vh, 4rem); }
+  .footer__mark { font-size: clamp(4rem, min(15vw, 19vh), 17rem); }
+}
+
 @media (max-width: 1200px) {
-  .downloads ul { grid-template-columns: 1fr; }
-  .downloads a { padding: .8rem 1.4rem .8rem .8rem; }
+  /* Narrow half-width hub: keep tile labels inside their pills */
+  .tile span { font-size: .74rem; letter-spacing: .14em; }
 }
 
 @media (max-width: 1024px) {
@@ -1074,6 +1134,8 @@ nav.footer__col ul { grid-template-columns: repeat(2, max-content); column-gap: 
   .values p { font-size: .9rem; }
   .values .icon { width: 1.6rem; height: 1.6rem; margin-bottom: .5rem; }
 
+  /* Taller photo panel so Chanelle's face sits clear above the text */
+  .resources__intro { min-height: 70svh; }
   .tiles { grid-template-columns: 1fr 1fr; }
   .tile { min-height: 8.5rem; }
   .tile em { display: none; }
